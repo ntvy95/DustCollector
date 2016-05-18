@@ -1,0 +1,73 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace AgentOrientedProgramming
+{
+    public partial class RoomSizeForm : Form
+    {
+        MainForm ParentForm;
+        int RoomWidth, RoomHeight;
+        public RoomSizeForm(MainForm pf)
+        {
+            InitializeComponent();
+            ParentForm = pf;
+        }
+
+        private void button_Cancel_Click(object sender, EventArgs e)
+        {
+            ParentForm.Processing = Process.None;
+            Hide();
+        }
+
+        private void RoomSizeForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ParentForm.Processing = Process.None;
+            Hide();
+            e.Cancel = true;
+        }
+
+        private void button_OK_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                RoomWidth = Int32.Parse(textbox_Width.Text);
+                RoomHeight = Int32.Parse(textbox_Height.Text);
+                ParentForm.Environment.Controls.Clear();
+                ParentForm.Environment.RowStyles.Clear();
+                ParentForm.Environment.ColumnStyles.Clear();
+                ParentForm.Environment.BackColor = Color.White;
+                for (int i = 0; i < RoomWidth; i++)
+                {
+                    ParentForm.Environment.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F / RoomWidth));
+                }
+                ParentForm.Environment.ColumnCount = RoomWidth;
+                for (int i = 0; i < RoomHeight; i++)
+                {
+                    ParentForm.Environment.RowStyles.Add(new RowStyle(SizeType.Percent, 100F / ParentForm.Height));
+                }
+                ParentForm.Environment.RowCount = RoomHeight;
+                ParentForm.Environment.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+                ParentForm.Environment.Refresh();
+                ParentForm.Processing = Process.None;
+                Hide();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void RoomSizeForm_Activated(object sender, EventArgs e)
+        {
+            textbox_Width.Text = RoomWidth.ToString();
+            textbox_Height.Text = RoomHeight.ToString();
+        }
+    }
+}
