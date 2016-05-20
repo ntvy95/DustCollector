@@ -20,12 +20,6 @@ namespace AgentOrientedProgramming
             ParentForm = pf;
         }
 
-        private void button_Cancel_Click(object sender, EventArgs e)
-        {
-            ParentForm.Processing = Process.None;
-            Hide();
-        }
-
         private void RoomSizeForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             ParentForm.Processing = Process.None;
@@ -39,6 +33,10 @@ namespace AgentOrientedProgramming
             {
                 RoomWidth = Int32.Parse(textbox_Width.Text);
                 RoomHeight = Int32.Parse(textbox_Height.Text);
+                if (RoomWidth == 0 || RoomHeight == 0)
+                {
+                    throw new Exception("Width and height of the room must be greater than zero!");
+                }
                 ParentForm.Environment.Controls.Clear();
                 ParentForm.Environment.RowStyles.Clear();
                 ParentForm.Environment.ColumnStyles.Clear();
