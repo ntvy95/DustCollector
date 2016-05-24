@@ -63,10 +63,10 @@ namespace AgentOrientedProgramming
             int Column, Row;
             do
             {
-                Column = r.Next(0, ParentForm.Environment.ColumnCount - 1);
-                Row = r.Next(0, ParentForm.Environment.RowCount - 1);
-                Panel CellPanel = (Panel)ParentForm.Environment.GetControlFromPosition(Column, Row);
-                if (CellPanel == null || (AllowedCell != null && AllowedCell.Contains(CellPanel.BackColor) == true))
+                Column = r.Next(0, ParentForm.Environment.ColumnCount);
+                Row = r.Next(0, ParentForm.Environment.RowCount);
+                if (ParentForm.bgColors[Column, Row] == ParentForm.CellColorDictionary[Process.None]
+                    || (AllowedCell != null && AllowedCell.Contains(ParentForm.bgColors[Column, Row]) == true))
                 {
                     break;
                 }

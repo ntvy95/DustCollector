@@ -20,7 +20,8 @@ namespace AgentOrientedProgramming
     {
         public TableLayoutPanel Environment;
         public Process Processing;
-        private Dictionary<Process, Color> CellColorDictionary;
+        public Color[,] bgColors;
+        public Dictionary<Process, Color> CellColorDictionary;
         private RoomSizeForm RSForm;
         private SetRandomForm SRForm;
         private Point AgentPosition;
@@ -38,11 +39,21 @@ namespace AgentOrientedProgramming
             Environment = new TableLayoutPanel();
             Environment.Parent = MainPanel;
             Environment.Dock = DockStyle.Fill;
+            Environment.CellPaint += Environment_CellPaint;
 
             CellColorDictionary = new Dictionary<Process, Color>();
+            CellColorDictionary.Add(Process.None, Color.White);
             CellColorDictionary.Add(Process.SetAgent, Color.LightBlue);
             CellColorDictionary.Add(Process.SetDust, Color.LightGray);
             CellColorDictionary.Add(Process.SetObstacles, Color.Black);
+        }
+
+        void Environment_CellPaint(object sender, TableLayoutCellPaintEventArgs e)
+        {
+            using (var b = new SolidBrush(bgColors[e.Column, e.Row]))
+            {
+                e.Graphics.FillRectangle(b, e.CellBounds);
+            }
         }
         private void Set_Click(Process P, Condition Cond, Procedure StartProcedure, Procedure EndProcedure)
         {
@@ -118,14 +129,10 @@ namespace AgentOrientedProgramming
         {
             Main.Click += (object s, EventArgs ev) =>
             {
-                if (Processing == P)
-                {
-                    Sub.Dispose();
-                }
-                if (P == Process.SetAgent)
-                {
-                    SetManually_Agent_Direction.Enabled = false;
-                }
+                Sub.Dispose();
+                bgColors[AgentPosition.X, AgentPosition.Y] = CellColorDictionary[Process.None];
+                SetManually_Agent_Direction.Enabled = false;
+                Environment.Refresh();
             };
         }
         public Point Environment_Click(Process P, Point? Position = null)
@@ -134,59 +141,45 @@ namespace AgentOrientedProgramming
             {
                 Position = Environment.GetCellPositionFromCursorPosition();
             }
-            Panel CellPanel = (Panel)Environment.GetControlFromPosition(Position.Value.X, Position.Value.Y);
-            string CellText = null;
-            switch (P)
+            if (bgColors[Position.Value.X, Position.Value.Y] == CellColorDictionary[P])
             {
-                case Process.SetAgent:
-                    if (CellPanel == null)
-                    {
-                        CellText = "[Environment : CLEAN] [Agent : UP] [Action : NONE]";
-                    }
-                    else
-                    {
-                        CellText = "[Environment : DIRTY] [Agent : UP] [Action : NONE]";
-                    }
-                    break;
-            }
-            if (CellPanel == null)
-            {
-                CellPanel = new Panel();
-                CellPanel.Dock = DockStyle.Fill;
-                Environment.Controls.Add(CellPanel, Position.Value.X, Position.Value.Y);
-            }
-            CellPanel.BackColor = CellColorDictionary[P];
-
-            Label CellLabel = null;
-            if (CellPanel.Controls.Count > 0)
-            {
-                CellLabel = (Label)CellPanel.Controls[0];
-            }
-            if (CellText != null)
-            {
-                if (CellLabel == null)
-                {
-                    CellLabel = new Label();
-                    CellLabel.AutoSize = false;
-                    CellLabel.Dock = DockStyle.Fill;
-                    CellLabel.TextAlign = ContentAlignment.MiddleCenter;
-                    CellLabel.Text = CellText;
-                    CellPanel.Controls.Add(CellLabel);
-                }
-                else
-                {
-                    CellLabel.RemoveClickEvent();
-                }
-                Click_To_Dispose(P, CellPanel.Controls[0], CellPanel);
+                bgColors[Position.Value.X, Position.Value.Y] = CellColorDictionary[Process.None];
             }
             else
             {
-                if (CellLabel != null)
+                string CellText = null;
+                switch (P)
                 {
-                    CellLabel.Dispose();
+                    case Process.SetAgent:
+                        if (bgColors[Position.Value.X, Position.Value.Y] == CellColorDictionary[Process.SetDust])
+                        {
+                            CellText = "[Environment : DIRTY] [Agent : UP] [Action : NONE]";
+                        }
+                        else
+                        {
+                            CellText = "[Environment : CLEAN] [Agent : UP] [Action : NONE]";
+                        }
+                        break;
                 }
-                Click_To_Dispose(P, CellPanel, CellPanel);
+
+                bgColors[Position.Value.X, Position.Value.Y] = CellColorDictionary[P];
+                Label CellLabel = (Label)Environment.GetControlFromPosition(Position.Value.X, Position.Value.Y);
+                if (CellText != null)
+                {
+                    if (CellLabel == null)
+                    {
+                        CellLabel = new Label();
+                        CellLabel.AutoSize = false;
+                        CellLabel.Dock = DockStyle.Fill;
+                        CellLabel.TextAlign = ContentAlignment.MiddleCenter;
+                        CellLabel.BackColor = Color.Transparent;
+                        Click_To_Dispose(P, CellLabel, CellLabel);
+                        Environment.Controls.Add(CellLabel, Position.Value.X, Position.Value.Y);
+                    }
+                    CellLabel.Text = CellText;
+                }
             }
+            Environment.Refresh();
             return Position.Value;
         }
         private void Environment_Click_Obstacles(object sender, EventArgs e)
@@ -245,26 +238,26 @@ namespace AgentOrientedProgramming
         {
             if (AgentPosition != null)
             {
-                Panel CellPanel = (Panel)Environment.GetControlFromPosition(AgentPosition.X, AgentPosition.Y);
-                if (CellPanel != null)
+                Label CellLabel = (Label)Environment.GetControlFromPosition(AgentPosition.X, AgentPosition.Y);
+                if (CellLabel != null)
                 {
-                    if (CellPanel.Controls.Count > 0 && CellPanel.Controls[0].Text.Contains("[Environment : DIRTY]"))
+                    if (CellLabel.Text.Contains("[Environment : DIRTY]"))
                     {
-                        CellPanel.Controls.Clear();
-                        CellPanel.BackColor = CellColorDictionary[Process.SetDust];
+                        bgColors[AgentPosition.X, AgentPosition.Y] = CellColorDictionary[Process.SetDust];
                     }
                     else
                     {
-                        CellPanel.Dispose();
+                        bgColors[AgentPosition.X, AgentPosition.Y] = CellColorDictionary[Process.None];
                     }
+                    CellLabel.Dispose();
                 }
             }
         }
 
         private void Agent_UpdateDirection(string Direction)
         {
-            Environment.GetControlFromPosition(AgentPosition.X, AgentPosition.Y).Controls[0].Text
-            = Environment.GetControlFromPosition(AgentPosition.X, AgentPosition.Y).Controls[0].Text
+            Environment.GetControlFromPosition(AgentPosition.X, AgentPosition.Y).Text
+            = Environment.GetControlFromPosition(AgentPosition.X, AgentPosition.Y).Text
                 .Replace("[Agent : UP]", Direction)
                 .Replace("[Agent : DOWN]", Direction)
                 .Replace("[Agent : LEFT]", Direction)
@@ -323,6 +316,11 @@ namespace AgentOrientedProgramming
             AgentPosition = SRForm.Random(1, new HashSet<Color> { CellColorDictionary[Process.SetDust] });
             SetManually_Agent_Direction.Enabled = true;
             Processing = Process.None;
+        }
+
+        private void About_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("DUST COLLECTOR");
         }
     }
 }

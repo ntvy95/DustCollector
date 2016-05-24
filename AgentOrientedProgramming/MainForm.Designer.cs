@@ -50,7 +50,7 @@
             this.SetManually_Agent_RIGHT = new System.Windows.Forms.ToolStripMenuItem();
             this.controlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.About = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel = new System.Windows.Forms.Panel();
             this.MainMenu.SuspendLayout();
             this.SuspendLayout();
@@ -61,7 +61,7 @@
             this.fileToolStripMenuItem,
             this.editToolStripMenuItem,
             this.controlToolStripMenuItem,
-            this.aboutToolStripMenuItem});
+            this.About});
             this.MainMenu.Location = new System.Drawing.Point(0, 0);
             this.MainMenu.Name = "MainMenu";
             this.MainMenu.Size = new System.Drawing.Size(709, 24);
@@ -112,14 +112,14 @@
             // SetRandom_Obstacles
             // 
             this.SetRandom_Obstacles.Name = "SetRandom_Obstacles";
-            this.SetRandom_Obstacles.Size = new System.Drawing.Size(152, 22);
+            this.SetRandom_Obstacles.Size = new System.Drawing.Size(142, 22);
             this.SetRandom_Obstacles.Text = "Set random";
             this.SetRandom_Obstacles.Click += new System.EventHandler(this.SetRandom_Obstacles_Click);
             // 
             // SetManually_Obstacles
             // 
             this.SetManually_Obstacles.Name = "SetManually_Obstacles";
-            this.SetManually_Obstacles.Size = new System.Drawing.Size(152, 22);
+            this.SetManually_Obstacles.Size = new System.Drawing.Size(142, 22);
             this.SetManually_Obstacles.Text = "Set manually";
             this.SetManually_Obstacles.Click += new System.EventHandler(this.SetManually_Obstacles_Click);
             // 
@@ -135,14 +135,14 @@
             // SetRandom_Dust
             // 
             this.SetRandom_Dust.Name = "SetRandom_Dust";
-            this.SetRandom_Dust.Size = new System.Drawing.Size(152, 22);
+            this.SetRandom_Dust.Size = new System.Drawing.Size(142, 22);
             this.SetRandom_Dust.Text = "Set random";
             this.SetRandom_Dust.Click += new System.EventHandler(this.SetRandom_Dust_Click);
             // 
             // SetManually_Dust
             // 
             this.SetManually_Dust.Name = "SetManually_Dust";
-            this.SetManually_Dust.Size = new System.Drawing.Size(152, 22);
+            this.SetManually_Dust.Size = new System.Drawing.Size(142, 22);
             this.SetManually_Dust.Text = "Set manually";
             this.SetManually_Dust.Click += new System.EventHandler(this.SetManually_Dust_Click);
             // 
@@ -229,14 +229,15 @@
             // startToolStripMenuItem
             // 
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.startToolStripMenuItem.Text = "Start";
             // 
-            // aboutToolStripMenuItem
+            // About
             // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
-            this.aboutToolStripMenuItem.Text = "About";
+            this.About.Name = "About";
+            this.About.Size = new System.Drawing.Size(52, 20);
+            this.About.Text = "About";
+            this.About.Click += new System.EventHandler(this.About_Click);
             // 
             // MainPanel
             // 
@@ -277,7 +278,7 @@
         private System.Windows.Forms.ToolStripMenuItem controlToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem startToolStripMenuItem;
         private System.Windows.Forms.Panel MainPanel;
-        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem About;
         private System.Windows.Forms.ToolStripMenuItem setAgentToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem SetRandom_Obstacles;
         private System.Windows.Forms.ToolStripMenuItem SetManually_Obstacles;
