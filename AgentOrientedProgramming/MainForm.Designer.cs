@@ -36,6 +36,7 @@
             this.setObstaclesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SetRandom_Obstacles = new System.Windows.Forms.ToolStripMenuItem();
             this.SetManually_Obstacles = new System.Windows.Forms.ToolStripMenuItem();
+            this.setMovableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setDustToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SetRandom_Dust = new System.Windows.Forms.ToolStripMenuItem();
             this.SetManually_Dust = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,7 +53,6 @@
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.About = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel = new System.Windows.Forms.Panel();
-            this.setMovableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,7 +65,7 @@
             this.About});
             this.MainMenu.Location = new System.Drawing.Point(0, 0);
             this.MainMenu.Name = "MainMenu";
-            this.MainMenu.Size = new System.Drawing.Size(709, 24);
+            this.MainMenu.Size = new System.Drawing.Size(334, 24);
             this.MainMenu.TabIndex = 0;
             this.MainMenu.Text = "menuStrip1";
             // 
@@ -114,16 +114,22 @@
             // SetRandom_Obstacles
             // 
             this.SetRandom_Obstacles.Name = "SetRandom_Obstacles";
-            this.SetRandom_Obstacles.Size = new System.Drawing.Size(152, 22);
+            this.SetRandom_Obstacles.Size = new System.Drawing.Size(142, 22);
             this.SetRandom_Obstacles.Text = "Set random";
             this.SetRandom_Obstacles.Click += new System.EventHandler(this.SetRandom_Obstacles_Click);
             // 
             // SetManually_Obstacles
             // 
             this.SetManually_Obstacles.Name = "SetManually_Obstacles";
-            this.SetManually_Obstacles.Size = new System.Drawing.Size(152, 22);
+            this.SetManually_Obstacles.Size = new System.Drawing.Size(142, 22);
             this.SetManually_Obstacles.Text = "Set manually";
             this.SetManually_Obstacles.Click += new System.EventHandler(this.SetManually_Obstacles_Click);
+            // 
+            // setMovableToolStripMenuItem
+            // 
+            this.setMovableToolStripMenuItem.Name = "setMovableToolStripMenuItem";
+            this.setMovableToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.setMovableToolStripMenuItem.Text = "Set movable";
             // 
             // setDustToolStripMenuItem
             // 
@@ -160,7 +166,7 @@
             // SetRandom_Agent
             // 
             this.SetRandom_Agent.Name = "SetRandom_Agent";
-            this.SetRandom_Agent.Size = new System.Drawing.Size(152, 22);
+            this.SetRandom_Agent.Size = new System.Drawing.Size(142, 22);
             this.SetRandom_Agent.Text = "Set random";
             this.SetRandom_Agent.Click += new System.EventHandler(this.SetRandom_Agent_Click);
             // 
@@ -170,7 +176,7 @@
             this.SetManually_Agent,
             this.SetManually_Agent_Direction});
             this.SetManually_Agent_Parent.Name = "SetManually_Agent_Parent";
-            this.SetManually_Agent_Parent.Size = new System.Drawing.Size(152, 22);
+            this.SetManually_Agent_Parent.Size = new System.Drawing.Size(142, 22);
             this.SetManually_Agent_Parent.Text = "Set manually";
             // 
             // SetManually_Agent
@@ -249,23 +255,18 @@
             this.MainPanel.Cursor = System.Windows.Forms.Cursors.Default;
             this.MainPanel.Location = new System.Drawing.Point(0, 27);
             this.MainPanel.Name = "MainPanel";
-            this.MainPanel.Size = new System.Drawing.Size(709, 294);
-            this.MainPanel.TabIndex = 1;
-            // 
-            // setMovableToolStripMenuItem
-            // 
-            this.setMovableToolStripMenuItem.Name = "setMovableToolStripMenuItem";
-            this.setMovableToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.setMovableToolStripMenuItem.Text = "Set movable";
+            this.MainPanel.Size = new System.Drawing.Size(334, 284);
+            this.MainPanel.TabIndex = 2;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(709, 322);
+            this.ClientSize = new System.Drawing.Size(334, 311);
             this.Controls.Add(this.MainPanel);
             this.Controls.Add(this.MainMenu);
             this.MainMenuStrip = this.MainMenu;
+            this.MinimumSize = new System.Drawing.Size(350, 350);
             this.Name = "MainForm";
             this.Text = "Dust Collector";
             this.MainMenu.ResumeLayout(false);
@@ -285,7 +286,6 @@
         private System.Windows.Forms.ToolStripMenuItem setObstaclesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem controlToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem startToolStripMenuItem;
-        private System.Windows.Forms.Panel MainPanel;
         private System.Windows.Forms.ToolStripMenuItem About;
         private System.Windows.Forms.ToolStripMenuItem setAgentToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem SetRandom_Obstacles;
@@ -302,6 +302,7 @@
         private System.Windows.Forms.ToolStripMenuItem SetManually_Agent_LEFT;
         private System.Windows.Forms.ToolStripMenuItem SetManually_Agent_RIGHT;
         private System.Windows.Forms.ToolStripMenuItem setMovableToolStripMenuItem;
+        private System.Windows.Forms.Panel MainPanel;
     }
 }
 

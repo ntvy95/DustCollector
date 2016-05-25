@@ -12,16 +12,6 @@ using System.Diagnostics;
 
 namespace AgentOrientedProgramming
 {
-    public enum Process
-    {
-        None, SetRoomSize, SetObstacles, SetAgent, SetDust
-    }
-    public class Cell
-    {
-        Color Color;
-        Process Type;
-        bool Movable;
-    }
     public partial class MainForm : Form
     {
         public TableLayoutPanel Environment;
@@ -345,5 +335,15 @@ namespace AgentOrientedProgramming
         {
             MessageBox.Show("DUST COLLECTOR");
         }
+    }
+    public enum Process
+    {
+        None, SetRoomSize, SetObstacles, SetAgent, SetDust
+    }
+    public class Cell
+    {
+        Color Color;
+        Process Type;
+        bool Movable;
     }
 }
