@@ -52,6 +52,7 @@
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.About = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel = new System.Windows.Forms.Panel();
+            this.setMovableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -104,7 +105,8 @@
             // 
             this.setObstaclesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.SetRandom_Obstacles,
-            this.SetManually_Obstacles});
+            this.SetManually_Obstacles,
+            this.setMovableToolStripMenuItem});
             this.setObstaclesToolStripMenuItem.Name = "setObstaclesToolStripMenuItem";
             this.setObstaclesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.setObstaclesToolStripMenuItem.Text = "Set obstacles";
@@ -112,14 +114,14 @@
             // SetRandom_Obstacles
             // 
             this.SetRandom_Obstacles.Name = "SetRandom_Obstacles";
-            this.SetRandom_Obstacles.Size = new System.Drawing.Size(142, 22);
+            this.SetRandom_Obstacles.Size = new System.Drawing.Size(152, 22);
             this.SetRandom_Obstacles.Text = "Set random";
             this.SetRandom_Obstacles.Click += new System.EventHandler(this.SetRandom_Obstacles_Click);
             // 
             // SetManually_Obstacles
             // 
             this.SetManually_Obstacles.Name = "SetManually_Obstacles";
-            this.SetManually_Obstacles.Size = new System.Drawing.Size(142, 22);
+            this.SetManually_Obstacles.Size = new System.Drawing.Size(152, 22);
             this.SetManually_Obstacles.Text = "Set manually";
             this.SetManually_Obstacles.Click += new System.EventHandler(this.SetManually_Obstacles_Click);
             // 
@@ -229,7 +231,7 @@
             // startToolStripMenuItem
             // 
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.startToolStripMenuItem.Text = "Start";
             // 
             // About
@@ -249,6 +251,12 @@
             this.MainPanel.Name = "MainPanel";
             this.MainPanel.Size = new System.Drawing.Size(709, 294);
             this.MainPanel.TabIndex = 1;
+            // 
+            // setMovableToolStripMenuItem
+            // 
+            this.setMovableToolStripMenuItem.Name = "setMovableToolStripMenuItem";
+            this.setMovableToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.setMovableToolStripMenuItem.Text = "Set movable";
             // 
             // MainForm
             // 
@@ -293,6 +301,7 @@
         private System.Windows.Forms.ToolStripMenuItem SetManually_Agent_DOWN;
         private System.Windows.Forms.ToolStripMenuItem SetManually_Agent_LEFT;
         private System.Windows.Forms.ToolStripMenuItem SetManually_Agent_RIGHT;
+        private System.Windows.Forms.ToolStripMenuItem setMovableToolStripMenuItem;
     }
 }
 

@@ -16,6 +16,12 @@ namespace AgentOrientedProgramming
     {
         None, SetRoomSize, SetObstacles, SetAgent, SetDust
     }
+    public class Cell
+    {
+        Color Color;
+        Process Type;
+        bool Movable;
+    }
     public partial class MainForm : Form
     {
         public TableLayoutPanel Environment;
@@ -241,16 +247,18 @@ namespace AgentOrientedProgramming
                 Label CellLabel = (Label)Environment.GetControlFromPosition(AgentPosition.X, AgentPosition.Y);
                 if (CellLabel != null)
                 {
-                    if (CellLabel.Text.Contains("[Environment : DIRTY]"))
-                    {
-                        bgColors[AgentPosition.X, AgentPosition.Y] = CellColorDictionary[Process.SetDust];
-                    }
-                    else
-                    {
-                        bgColors[AgentPosition.X, AgentPosition.Y] = CellColorDictionary[Process.None];
-                    }
+                    //if (CellLabel.Text.Contains("[Environment : DIRTY]"))
+                    //{
+                    //    bgColors[AgentPosition.X, AgentPosition.Y] = CellColorDictionary[Process.SetDust];
+                    //}
+                    //else
+                    //{
+                    //    bgColors[AgentPosition.X, AgentPosition.Y] = CellColorDictionary[Process.None];
+                    //}
+                    bgColors[AgentPosition.X, AgentPosition.Y] = CellColorDictionary[Process.None];
                     CellLabel.Dispose();
                 }
+                SetManually_Agent_Direction.Enabled = false;
             }
         }
 
@@ -294,6 +302,7 @@ namespace AgentOrientedProgramming
                 SRForm.Show();
             }
         }
+
         private void SetRandom_Obstacles_Click(object sender, EventArgs e)
         {
             Processing = Process.SetObstacles;
@@ -316,6 +325,20 @@ namespace AgentOrientedProgramming
             AgentPosition = SRForm.Random(1, new HashSet<Color> { CellColorDictionary[Process.SetDust] });
             SetManually_Agent_Direction.Enabled = true;
             Processing = Process.None;
+        }
+
+        private void Cell_Remove_Color(Color c)
+        {
+            for (int i = 0; i < Environment.ColumnCount; i++)
+            {
+                for (int j = 0; j < Environment.RowCount; j++)
+                {
+                    if (bgColors[i, j] == c)
+                    {
+                        bgColors[i, j] = Color.White;
+                    }
+                }
+            }
         }
 
         private void About_Click(object sender, EventArgs e)
