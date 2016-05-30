@@ -140,26 +140,32 @@ namespace AgentOrientedProgramming
                 switch (Room.Map[P.X, P.Y].type)
                 {
                     case Process.SetAgent:
-                        new RoomObject(P, Room);
-                        Room.DCAgent = null;
-                        SetManually_Agent_Direction.Enabled = false;
-                        CellLabel.Dispose();
-                        break;
-                    case Process.SetObstacles:
-                        bool isMovable = false;
-                        if (ev.Button == MouseButtons.Right)
-                        {
-                            isMovable = true;
-                        }
-                        if (((Obstacle)Room.Map[P.X, P.Y]).isMovable == isMovable)
+                        if (Processing == Process.SetAgent)
                         {
                             new RoomObject(P, Room);
+                            Room.DCAgent = null;
+                            SetManually_Agent_Direction.Enabled = false;
                             CellLabel.Dispose();
                         }
-                        else
+                        break;
+                    case Process.SetObstacles:
+                        if (Processing == Process.SetObstacles)
                         {
-                            ((Obstacle)Room.Map[P.X, P.Y]).isMovable = isMovable;
-                            CellLabel.Text = ((Obstacle)Room.Map[P.X, P.Y]).getObstacleState();
+                            bool isMovable = false;
+                            if (ev.Button == MouseButtons.Right)
+                            {
+                                isMovable = true;
+                            }
+                            if (((Obstacle)Room.Map[P.X, P.Y]).isMovable == isMovable)
+                            {
+                                new RoomObject(P, Room);
+                                CellLabel.Dispose();
+                            }
+                            else
+                            {
+                                ((Obstacle)Room.Map[P.X, P.Y]).isMovable = isMovable;
+                                CellLabel.Text = ((Obstacle)Room.Map[P.X, P.Y]).getObstacleState();
+                            }
                         }
                         break;
                 }

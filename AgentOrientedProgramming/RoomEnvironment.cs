@@ -33,6 +33,18 @@ namespace AgentOrientedProgramming
             }
         }
 
+        public void UpdateRoomObject(Point p, RoomObject RObject)
+        {
+            Map[p.X, p.Y] = RObject;
+            RObject.position = p;
+            bgColors[p.X, p.Y] = RObject.color;
+        }
+
+        public void SynchronizeColor(Point p)
+        {
+            bgColors[p.X, p.Y] = Map[p.X, p.Y].color;
+        }
+
         public Point ConvertCoordination_Agent2Env(Point a)
         {
             return new Point(a.X - DCAgent.position.X, a.Y - DCAgent.position.Y);

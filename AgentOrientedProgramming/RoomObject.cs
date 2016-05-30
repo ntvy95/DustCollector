@@ -21,21 +21,24 @@ namespace AgentOrientedProgramming
         {
             position = p;
             room = r;
-            UpdateColor(RoomObject.objcolor);
+            color = RoomObject.objcolor;
             type = RoomObject.objtype;
             if (room.Map != null)
             {
                 Below = room.Map[p.X, p.Y];
-                room.Map[p.X, p.Y] = this;
+                room.UpdateRoomObject(p, this);
                 if (Below != null && (Below.type == Process.SetAgent || Below.type == Process.SetObstacles))
                 {
                     Below = new RoomObject(position, room);
                 }
             }
         }
-        public void UpdateColor(Color c) {
-            color = c;
-            room.bgColors[position.X, position.Y] = color;
+
+        public void Move(Point p)
+        {
+            room.UpdateRoomObject(position, Below);
+            Below = room.Map[p.X, p.Y];
+            room.UpdateRoomObject(p, this);
         }
     }
 
@@ -46,8 +49,9 @@ namespace AgentOrientedProgramming
         public Dust(Point p, RoomEnvironment r)
             : base(p, r)
         {
-            UpdateColor(Dust.objcolor);
+            base.color = Dust.objcolor;
             base.type = Dust.objtype;
+            room.SynchronizeColor(p);
         }
     }
 
@@ -59,9 +63,10 @@ namespace AgentOrientedProgramming
         public Obstacle(Point p, RoomEnvironment r, bool i)
             : base(p, r)
         {
-            UpdateColor(Obstacle.objcolor);
+            base.color = Obstacle.objcolor;
             base.type = Obstacle.objtype;
             isMovable = i;
+            room.SynchronizeColor(p);
         }
         public void Update()
         {
@@ -113,12 +118,13 @@ namespace AgentOrientedProgramming
             {
                 new RoomObject(base.room.DCAgent.position, r);
             }
-            UpdateColor(Agent.objcolor);
+            base.color = Agent.objcolor;
             base.type = Agent.objtype;
             base.room.DCAgent = this;
             this.a = 0;
             this.direction = d;
             this.action = "[Action : NONE]";
+            room.SynchronizeColor(p);
         }
         public string Turn90()
         {
