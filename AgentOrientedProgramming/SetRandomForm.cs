@@ -45,7 +45,7 @@ namespace AgentOrientedProgramming
             }
         }
 
-        public Point Random(int N, HashSet<Color> AllowedCell = null)
+        public void Random(int N, HashSet<Process> AllowedCell = null)
         {
             Point Position = new Point();
             while (N > 0)
@@ -54,10 +54,9 @@ namespace AgentOrientedProgramming
                 ParentForm.Environment_Click(ParentForm.Processing, Position);
                 N = N - 1;
             }
-            return Position;
         }
 
-        private Point Random_ColumnRow(HashSet<Color> AllowedCell = null)
+        private Point Random_ColumnRow(HashSet<Process> AllowedCell = null)
         {
             Random r = new Random();
             int Column, Row;
@@ -65,8 +64,8 @@ namespace AgentOrientedProgramming
             {
                 Column = r.Next(0, ParentForm.Environment.ColumnCount);
                 Row = r.Next(0, ParentForm.Environment.RowCount);
-                if (ParentForm.bgColors[Column, Row] == ParentForm.CellColorDictionary[Process.None]
-                    || (AllowedCell != null && AllowedCell.Contains(ParentForm.bgColors[Column, Row]) == true))
+                if (ParentForm.Room.Map[Column, Row].type == Process.None
+                    || (AllowedCell != null && AllowedCell.Contains(ParentForm.Room.Map[Column, Row].type) == true))
                 {
                     break;
                 }

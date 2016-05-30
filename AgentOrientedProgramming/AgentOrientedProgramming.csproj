@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RoomEnvironment.cs" />
+    <Compile Include="RoomObject.cs" />
     <Compile Include="RoomSizeForm.cs">
       <SubType>Form</SubType>
     </Compile>

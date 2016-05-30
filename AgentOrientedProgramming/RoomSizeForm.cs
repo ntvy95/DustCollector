@@ -40,14 +40,7 @@ namespace AgentOrientedProgramming
                 ParentForm.Environment.Controls.Clear();
                 ParentForm.Environment.RowStyles.Clear();
                 ParentForm.Environment.ColumnStyles.Clear();
-                ParentForm.bgColors = new Color[RoomWidth, RoomHeight];
-                for (int i = 0; i < RoomWidth; i++)
-                {
-                    for (int j = 0; j < RoomHeight; j++)
-                    {
-                        ParentForm.bgColors[i, j] = ParentForm.CellColorDictionary[Process.None];
-                    }
-                }
+                ParentForm.Room.SetMap(RoomWidth, RoomHeight);
                 for (int i = 0; i < RoomWidth; i++)
                 {
                     ParentForm.Environment.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F / RoomWidth));
