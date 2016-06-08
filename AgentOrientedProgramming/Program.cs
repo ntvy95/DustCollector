@@ -21,6 +21,9 @@ namespace AgentOrientedProgramming
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
         }
+        public static double Deg2Rad(double degrees) {
+            return Math.PI * degrees / 180.0;
+        }
     }
 }
 

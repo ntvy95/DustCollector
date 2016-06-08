@@ -41,16 +41,18 @@
             this.SetManually_Dust = new System.Windows.Forms.ToolStripMenuItem();
             this.setAgentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SetRandom_Agent = new System.Windows.Forms.ToolStripMenuItem();
-            this.controlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.About = new System.Windows.Forms.ToolStripMenuItem();
-            this.MainPanel = new System.Windows.Forms.Panel();
             this.SetManually_Agent = new System.Windows.Forms.ToolStripMenuItem();
             this.SetManually_Agent_Direction = new System.Windows.Forms.ToolStripMenuItem();
             this.SetManually_Agent_UP = new System.Windows.Forms.ToolStripMenuItem();
             this.SetManually_Agent_DOWN = new System.Windows.Forms.ToolStripMenuItem();
             this.SetManually_Agent_LEFT = new System.Windows.Forms.ToolStripMenuItem();
             this.SetManually_Agent_RIGHT = new System.Windows.Forms.ToolStripMenuItem();
+            this.controlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.About = new System.Windows.Forms.ToolStripMenuItem();
+            this.MainPanel = new System.Windows.Forms.Panel();
+            this.oneNextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.forwardToToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -111,14 +113,14 @@
             // SetRandom_Obstacles
             // 
             this.SetRandom_Obstacles.Name = "SetRandom_Obstacles";
-            this.SetRandom_Obstacles.Size = new System.Drawing.Size(152, 22);
+            this.SetRandom_Obstacles.Size = new System.Drawing.Size(142, 22);
             this.SetRandom_Obstacles.Text = "Set random";
             this.SetRandom_Obstacles.Click += new System.EventHandler(this.SetRandom_Obstacles_Click);
             // 
             // SetManually_Obstacles
             // 
             this.SetManually_Obstacles.Name = "SetManually_Obstacles";
-            this.SetManually_Obstacles.Size = new System.Drawing.Size(152, 22);
+            this.SetManually_Obstacles.Size = new System.Drawing.Size(142, 22);
             this.SetManually_Obstacles.Text = "Set manually";
             this.SetManually_Obstacles.Click += new System.EventHandler(this.SetManually_Obstacles_Click);
             // 
@@ -134,14 +136,14 @@
             // SetRandom_Dust
             // 
             this.SetRandom_Dust.Name = "SetRandom_Dust";
-            this.SetRandom_Dust.Size = new System.Drawing.Size(152, 22);
+            this.SetRandom_Dust.Size = new System.Drawing.Size(142, 22);
             this.SetRandom_Dust.Text = "Set random";
             this.SetRandom_Dust.Click += new System.EventHandler(this.SetRandom_Dust_Click);
             // 
             // SetManually_Dust
             // 
             this.SetManually_Dust.Name = "SetManually_Dust";
-            this.SetManually_Dust.Size = new System.Drawing.Size(152, 22);
+            this.SetManually_Dust.Size = new System.Drawing.Size(142, 22);
             this.SetManually_Dust.Text = "Set manually";
             this.SetManually_Dust.Click += new System.EventHandler(this.SetManually_Dust_Click);
             // 
@@ -158,14 +160,63 @@
             // SetRandom_Agent
             // 
             this.SetRandom_Agent.Name = "SetRandom_Agent";
-            this.SetRandom_Agent.Size = new System.Drawing.Size(152, 22);
+            this.SetRandom_Agent.Size = new System.Drawing.Size(142, 22);
             this.SetRandom_Agent.Text = "Set random";
             this.SetRandom_Agent.Click += new System.EventHandler(this.SetRandom_Agent_Click);
+            // 
+            // SetManually_Agent
+            // 
+            this.SetManually_Agent.Name = "SetManually_Agent";
+            this.SetManually_Agent.Size = new System.Drawing.Size(142, 22);
+            this.SetManually_Agent.Text = "Set manually";
+            this.SetManually_Agent.Click += new System.EventHandler(this.SetManually_Agent_Click);
+            // 
+            // SetManually_Agent_Direction
+            // 
+            this.SetManually_Agent_Direction.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.SetManually_Agent_UP,
+            this.SetManually_Agent_DOWN,
+            this.SetManually_Agent_LEFT,
+            this.SetManually_Agent_RIGHT});
+            this.SetManually_Agent_Direction.Enabled = false;
+            this.SetManually_Agent_Direction.Name = "SetManually_Agent_Direction";
+            this.SetManually_Agent_Direction.Size = new System.Drawing.Size(142, 22);
+            this.SetManually_Agent_Direction.Text = "Direction";
+            // 
+            // SetManually_Agent_UP
+            // 
+            this.SetManually_Agent_UP.Name = "SetManually_Agent_UP";
+            this.SetManually_Agent_UP.Size = new System.Drawing.Size(111, 22);
+            this.SetManually_Agent_UP.Text = "UP";
+            this.SetManually_Agent_UP.Click += new System.EventHandler(this.SetManually_Agent_UP_Click);
+            // 
+            // SetManually_Agent_DOWN
+            // 
+            this.SetManually_Agent_DOWN.Name = "SetManually_Agent_DOWN";
+            this.SetManually_Agent_DOWN.Size = new System.Drawing.Size(111, 22);
+            this.SetManually_Agent_DOWN.Text = "DOWN";
+            this.SetManually_Agent_DOWN.Click += new System.EventHandler(this.SetManually_Agent_DOWN_Click);
+            // 
+            // SetManually_Agent_LEFT
+            // 
+            this.SetManually_Agent_LEFT.Name = "SetManually_Agent_LEFT";
+            this.SetManually_Agent_LEFT.Size = new System.Drawing.Size(111, 22);
+            this.SetManually_Agent_LEFT.Text = "LEFT";
+            this.SetManually_Agent_LEFT.Click += new System.EventHandler(this.SetManually_Agent_LEFT_Click);
+            // 
+            // SetManually_Agent_RIGHT
+            // 
+            this.SetManually_Agent_RIGHT.Name = "SetManually_Agent_RIGHT";
+            this.SetManually_Agent_RIGHT.Size = new System.Drawing.Size(111, 22);
+            this.SetManually_Agent_RIGHT.Text = "RIGHT";
+            this.SetManually_Agent_RIGHT.Click += new System.EventHandler(this.SetManually_Agent_RIGHT_Click);
             // 
             // controlToolStripMenuItem
             // 
             this.controlToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.startToolStripMenuItem});
+            this.startToolStripMenuItem,
+            this.oneNextToolStripMenuItem,
+            this.forwardToToolStripMenuItem});
             this.controlToolStripMenuItem.Name = "controlToolStripMenuItem";
             this.controlToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.controlToolStripMenuItem.Text = "Control";
@@ -194,52 +245,18 @@
             this.MainPanel.Size = new System.Drawing.Size(334, 284);
             this.MainPanel.TabIndex = 2;
             // 
-            // SetManually_Agent
+            // oneNextToolStripMenuItem
             // 
-            this.SetManually_Agent.Name = "SetManually_Agent";
-            this.SetManually_Agent.Size = new System.Drawing.Size(152, 22);
-            this.SetManually_Agent.Text = "Set manually";
-            this.SetManually_Agent.Click += new System.EventHandler(this.SetManually_Agent_Click);
+            this.oneNextToolStripMenuItem.Name = "oneNextToolStripMenuItem";
+            this.oneNextToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.oneNextToolStripMenuItem.Text = "One next";
+            this.oneNextToolStripMenuItem.Click += new System.EventHandler(this.oneNextToolStripMenuItem_Click);
             // 
-            // SetManually_Agent_Direction
+            // forwardToToolStripMenuItem
             // 
-            this.SetManually_Agent_Direction.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.SetManually_Agent_UP,
-            this.SetManually_Agent_DOWN,
-            this.SetManually_Agent_LEFT,
-            this.SetManually_Agent_RIGHT});
-            this.SetManually_Agent_Direction.Enabled = false;
-            this.SetManually_Agent_Direction.Name = "SetManually_Agent_Direction";
-            this.SetManually_Agent_Direction.Size = new System.Drawing.Size(152, 22);
-            this.SetManually_Agent_Direction.Text = "Direction";
-            // 
-            // SetManually_Agent_UP
-            // 
-            this.SetManually_Agent_UP.Name = "SetManually_Agent_UP";
-            this.SetManually_Agent_UP.Size = new System.Drawing.Size(152, 22);
-            this.SetManually_Agent_UP.Text = "UP";
-            this.SetManually_Agent_UP.Click += new System.EventHandler(this.SetManually_Agent_UP_Click);
-            // 
-            // SetManually_Agent_DOWN
-            // 
-            this.SetManually_Agent_DOWN.Name = "SetManually_Agent_DOWN";
-            this.SetManually_Agent_DOWN.Size = new System.Drawing.Size(152, 22);
-            this.SetManually_Agent_DOWN.Text = "DOWN";
-            this.SetManually_Agent_DOWN.Click += new System.EventHandler(this.SetManually_Agent_DOWN_Click);
-            // 
-            // SetManually_Agent_LEFT
-            // 
-            this.SetManually_Agent_LEFT.Name = "SetManually_Agent_LEFT";
-            this.SetManually_Agent_LEFT.Size = new System.Drawing.Size(152, 22);
-            this.SetManually_Agent_LEFT.Text = "LEFT";
-            this.SetManually_Agent_LEFT.Click += new System.EventHandler(this.SetManually_Agent_LEFT_Click);
-            // 
-            // SetManually_Agent_RIGHT
-            // 
-            this.SetManually_Agent_RIGHT.Name = "SetManually_Agent_RIGHT";
-            this.SetManually_Agent_RIGHT.Size = new System.Drawing.Size(152, 22);
-            this.SetManually_Agent_RIGHT.Text = "RIGHT";
-            this.SetManually_Agent_RIGHT.Click += new System.EventHandler(this.SetManually_Agent_RIGHT_Click);
+            this.forwardToToolStripMenuItem.Name = "forwardToToolStripMenuItem";
+            this.forwardToToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.forwardToToolStripMenuItem.Text = "Forward to...";
             // 
             // MainForm
             // 
@@ -284,6 +301,8 @@
         private System.Windows.Forms.ToolStripMenuItem SetManually_Agent_DOWN;
         private System.Windows.Forms.ToolStripMenuItem SetManually_Agent_LEFT;
         private System.Windows.Forms.ToolStripMenuItem SetManually_Agent_RIGHT;
+        private System.Windows.Forms.ToolStripMenuItem oneNextToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem forwardToToolStripMenuItem;
     }
 }
 

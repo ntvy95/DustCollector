@@ -356,6 +356,12 @@ namespace AgentOrientedProgramming
         {
             MessageBox.Show("DUST COLLECTOR");
         }
+
+        private void oneNextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string result = Room.DCAgent.infer().ElementAt(0);
+            Console.WriteLine(result);
+        }
     }
     public enum Process
     {

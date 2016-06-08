@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using SbsSW.SwiPlCs;
 
 namespace AgentOrientedProgramming
 {
@@ -111,6 +112,10 @@ namespace AgentOrientedProgramming
         public string action;
         public Point InnerPosition; //Agent's position in inner coordination.
         public int a;
+        public int m;
+        public int leftmoves;
+        public List<Weight> weight;
+        public List<Point> discover;
         public Agent(Point p, RoomEnvironment r, string d)
             : base(p, r)
         {
@@ -122,6 +127,10 @@ namespace AgentOrientedProgramming
             base.type = Agent.objtype;
             base.room.DCAgent = this;
             this.a = 0;
+            this.m = this.a;
+            this.leftmoves = 1;
+            this.weight = new List<Weight>() { new Weight(this.InnerPosition.X, this.InnerPosition.Y, 1) };
+            this.discover = new List<Point>() { new Point(this.position.X, this.position.Y) };
             this.direction = d;
             this.action = "[Action : NONE]";
             room.SynchronizeColor(p);
@@ -153,6 +162,90 @@ namespace AgentOrientedProgramming
         public string getAgentState()
         {
             return getEnvironment() + " " + direction + " " + action;
+        }
+        public IEnumerable<string> infer()
+        {
+            if (!PlEngine.IsInitialized)
+            {
+                String[] param = { "-q" };  // suppressing informational and banner messages
+                PlEngine.Initialize(param);
+                PlQuery.PlCall("consult('HutBuiDegToRad')");
+                PlQuery.PlCall("assert(do(" + this.action + "))");
+                PlQuery.PlCall("assert(in(" + this.InnerPosition.X + "," + this.InnerPosition.Y + "))");
+                PlQuery.PlCall("assert(facing(" + this.a + "))");
+                PlQuery.PlCall("assert(choose(" + this.m + "))");
+                if (this.isDirty())
+                {
+                    PlQuery.PlCall("assert(dirty(" + this.InnerPosition.X + "," + this.InnerPosition.Y + "))");
+                }
+                if (this.isObstacle())
+                {
+                    PlQuery.PlCall("assert(obstacle(" + this.upFront().X + "," + this.upFront().Y + "))");
+                }
+                PlQuery.PlCall("assert(leftmoves(" + this.leftmoves + "))");
+                foreach (Weight w in this.weight)
+                {
+                    PlQuery.PlCall("assert(weight(" + w.position.X + "," + w.position.Y + "," + w.weight + "))");
+                }
+                foreach (Point d in this.discover)
+                {
+                    PlQuery.PlCall("assert(discover(" + d.X + "," + d.Y + "))");
+                }
+                using (var q = new PlQuery("do(A)"))
+                {
+                    PlQuery.PlCall("retract(do(" + this.action + "))");
+                    this.action = q.Variables["A"].ToString();
+                    yield return this.action;
+                    PlQuery.PlCall("assert(do(" + this.action + "))");
+                }
+                PlEngine.PlCleanup();
+            }
+        }
+        public bool isDirty()
+        {
+            return Below.type == Process.SetDust;
+        }
+        public bool isObstacle()
+        {
+            Point upfront = upFront();
+            return upfront.X < 0 || upfront.X >= room.Map.GetLength(0)
+                || upfront.Y < 0 || upfront.Y >= room.Map.GetLength(1)
+                || room.Map[upfront.X, upfront.Y].type == Process.SetObstacles;
+        }
+        public Point upFront()
+        {
+            Point upfront = new Point(position.X, position.Y);
+            switch (this.direction)
+            {
+                case "[Agent : UP]":
+                    upfront.Y = upfront.Y - 1;
+                    break;
+                case "[Agent : LEFT]":
+                    upfront.X = upfront.X - 1;
+                    break;
+                case "[Agent : DOWN]":
+                    upfront.Y = upfront.Y + 1;
+                    break;
+                case "[Agent : RIGHT]":
+                    upfront.X = upfront.X + 1;
+                    break;
+            }
+            return upfront;
+        }
+        public Point Inner2Outer(Point Inner)
+        {
+            return new Point(position.X - InnerPosition.X + Inner.X, position.Y - InnerPosition.Y + Inner.Y);
+        }
+    }
+    public class Weight
+    {
+        public Point position;
+        public int weight;
+
+        public Weight(int X, int Y, int W)
+        {
+            position = new Point(X, Y);
+            weight = W;
         }
     }
 }
