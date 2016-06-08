@@ -156,14 +156,14 @@ namespace AgentOrientedProgramming
                             {
                                 isMovable = true;
                             }
-                            if (((Obstacle)Room.Map[P.X, P.Y]).isMovable == isMovable)
+                            if (Room.Map[P.X, P.Y].isMovable == isMovable)
                             {
                                 new RoomObject(P, Room);
                                 CellLabel.Dispose();
                             }
                             else
                             {
-                                ((Obstacle)Room.Map[P.X, P.Y]).isMovable = isMovable;
+                                Room.Map[P.X, P.Y].UpdateMovableState(isMovable);
                                 CellLabel.Text = ((Obstacle)Room.Map[P.X, P.Y]).getObstacleState();
                             }
                         }
@@ -359,8 +359,28 @@ namespace AgentOrientedProgramming
 
         private void oneNextToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string result = Room.DCAgent.infer().ElementAt(0);
-            Console.WriteLine(result);
+            //string result = Room.DCAgent.infer().ElementAt(0);
+            //Console.WriteLine(result);
+            Room.UpdateMap();
+        }
+
+        private void startToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Processing = Process.None;
+            editToolStripMenuItem.Enabled = false;
+            startToolStripMenuItem.Enabled = false;
+            stopToolStripMenuItem.Enabled = true;
+            oneNextToolStripMenuItem.Enabled = true;
+            forwardToToolStripMenuItem.Enabled = true;
+        }
+
+        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            editToolStripMenuItem.Enabled = true;
+            startToolStripMenuItem.Enabled = true;
+            stopToolStripMenuItem.Enabled = false;
+            oneNextToolStripMenuItem.Enabled = false;
+            forwardToToolStripMenuItem.Enabled = false;
         }
     }
     public enum Process

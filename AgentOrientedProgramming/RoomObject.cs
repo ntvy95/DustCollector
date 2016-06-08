@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using SbsSW.SwiPlCs;
+using System.Windows.Forms;
 
 namespace AgentOrientedProgramming
 {
@@ -17,13 +18,15 @@ namespace AgentOrientedProgramming
         public Point position;
         public RoomEnvironment room;
         public RoomObject Below;
+        public bool isMovable;
 
-        public RoomObject(Point p, RoomEnvironment r)
+        public RoomObject(Point p, RoomEnvironment r, bool i = false)
         {
             position = p;
             room = r;
             color = RoomObject.objcolor;
             type = RoomObject.objtype;
+            UpdateMovableState(i);
             if (room.Map != null)
             {
                 Below = room.Map[p.X, p.Y];
@@ -40,6 +43,24 @@ namespace AgentOrientedProgramming
             room.UpdateRoomObject(position, Below);
             Below = room.Map[p.X, p.Y];
             room.UpdateRoomObject(p, this);
+        }
+
+        public void UpdateMovableState(bool i)
+        {
+            if (isMovable && !i)
+            {
+                room.UpdatableObject.Remove(this);
+            }
+            else if (i)
+            {
+                room.UpdatableObject.Add(this);
+            }
+            isMovable = i;
+        }
+
+        public virtual void Update()
+        {
+
         }
     }
 
@@ -60,16 +81,14 @@ namespace AgentOrientedProgramming
     {
         new public static Color objcolor = Color.Black;
         new public static Process objtype = Process.SetObstacles;
-        public bool isMovable;
         public Obstacle(Point p, RoomEnvironment r, bool i)
-            : base(p, r)
+            : base(p, r, i)
         {
             base.color = Obstacle.objcolor;
             base.type = Obstacle.objtype;
-            isMovable = i;
             room.SynchronizeColor(p);
         }
-        public void Update()
+        public override void Update()
         {
             if (isMovable)
             {
@@ -84,11 +103,9 @@ namespace AgentOrientedProgramming
                 } while (nextx < 0 || nexty < 0
                     || base.room.Map[nextx, nexty].type == Process.SetObstacles
                     || base.room.Map[nextx, nexty].type == Process.SetAgent);
-                base.room.Map[base.position.X, base.position.Y] = Below;
-                Below = base.room.Map[nextx, nexty];
-                base.room.Map[nextx, nexty] = this;
-                base.position.X = nextx;
-                base.position.Y = nexty;
+                Label CellLabel = (Label)room.Display.GetControlFromPosition(position.X, position.Y);
+                room.Display.Controls.Add(CellLabel, nextx, nexty);
+                base.Move(new Point(nextx, nexty));
             }
         }
         public string getObstacleState()
@@ -117,7 +134,7 @@ namespace AgentOrientedProgramming
         public List<Weight> weight;
         public List<Point> discover;
         public Agent(Point p, RoomEnvironment r, string d)
-            : base(p, r)
+            : base(p, r, true)
         {
             if (base.room.DCAgent != null)
             {
@@ -162,6 +179,10 @@ namespace AgentOrientedProgramming
         public string getAgentState()
         {
             return getEnvironment() + " " + direction + " " + action;
+        }
+        public override void Update()
+        {
+
         }
         public IEnumerable<string> infer()
         {

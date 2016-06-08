@@ -49,10 +49,11 @@
             this.SetManually_Agent_RIGHT = new System.Windows.Forms.ToolStripMenuItem();
             this.controlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.About = new System.Windows.Forms.ToolStripMenuItem();
-            this.MainPanel = new System.Windows.Forms.Panel();
             this.oneNextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forwardToToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.About = new System.Windows.Forms.ToolStripMenuItem();
+            this.MainPanel = new System.Windows.Forms.Panel();
+            this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -215,6 +216,7 @@
             // 
             this.controlToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.startToolStripMenuItem,
+            this.stopToolStripMenuItem,
             this.oneNextToolStripMenuItem,
             this.forwardToToolStripMenuItem});
             this.controlToolStripMenuItem.Name = "controlToolStripMenuItem";
@@ -226,6 +228,22 @@
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
             this.startToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.startToolStripMenuItem.Text = "Start";
+            this.startToolStripMenuItem.Click += new System.EventHandler(this.startToolStripMenuItem_Click);
+            // 
+            // oneNextToolStripMenuItem
+            // 
+            this.oneNextToolStripMenuItem.Enabled = false;
+            this.oneNextToolStripMenuItem.Name = "oneNextToolStripMenuItem";
+            this.oneNextToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.oneNextToolStripMenuItem.Text = "One next";
+            this.oneNextToolStripMenuItem.Click += new System.EventHandler(this.oneNextToolStripMenuItem_Click);
+            // 
+            // forwardToToolStripMenuItem
+            // 
+            this.forwardToToolStripMenuItem.Enabled = false;
+            this.forwardToToolStripMenuItem.Name = "forwardToToolStripMenuItem";
+            this.forwardToToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.forwardToToolStripMenuItem.Text = "Forward to...";
             // 
             // About
             // 
@@ -245,18 +263,13 @@
             this.MainPanel.Size = new System.Drawing.Size(334, 284);
             this.MainPanel.TabIndex = 2;
             // 
-            // oneNextToolStripMenuItem
+            // stopToolStripMenuItem
             // 
-            this.oneNextToolStripMenuItem.Name = "oneNextToolStripMenuItem";
-            this.oneNextToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.oneNextToolStripMenuItem.Text = "One next";
-            this.oneNextToolStripMenuItem.Click += new System.EventHandler(this.oneNextToolStripMenuItem_Click);
-            // 
-            // forwardToToolStripMenuItem
-            // 
-            this.forwardToToolStripMenuItem.Name = "forwardToToolStripMenuItem";
-            this.forwardToToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.forwardToToolStripMenuItem.Text = "Forward to...";
+            this.stopToolStripMenuItem.Enabled = false;
+            this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.stopToolStripMenuItem.Text = "Stop";
+            this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -303,6 +316,7 @@
         private System.Windows.Forms.ToolStripMenuItem SetManually_Agent_RIGHT;
         private System.Windows.Forms.ToolStripMenuItem oneNextToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem forwardToToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem;
     }
 }
 

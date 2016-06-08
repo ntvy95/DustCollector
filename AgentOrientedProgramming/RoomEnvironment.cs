@@ -14,10 +14,12 @@ namespace AgentOrientedProgramming
         public RoomObject[,] Map;
         public TableLayoutPanel Display;
         public Agent DCAgent; //in environment's coordination.
+        public List<RoomObject> UpdatableObject;
 
         public RoomEnvironment(TableLayoutPanel d)
         {
             Display = d;
+            UpdatableObject = new List<RoomObject>();
         }
 
         public void SetMap(int width, int height) {
@@ -45,9 +47,13 @@ namespace AgentOrientedProgramming
             bgColors[p.X, p.Y] = Map[p.X, p.Y].color;
         }
 
-        public Point ConvertCoordination_Agent2Env(Point a)
+        public void UpdateMap()
         {
-            return new Point(a.X - DCAgent.position.X, a.Y - DCAgent.position.Y);
+            foreach (RoomObject RObj in UpdatableObject)
+            {
+                RObj.Update();
+            }
+            Display.Refresh();
         }
     }
 }
