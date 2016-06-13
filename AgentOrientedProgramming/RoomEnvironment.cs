@@ -55,5 +55,17 @@ namespace AgentOrientedProgramming
             }
             Display.Refresh();
         }
+
+        public void Remove_Agent()
+        {
+            Label CellLabel = (Label)Display.GetControlFromPosition(DCAgent.position.X, DCAgent.position.Y);
+            if (CellLabel != null)
+            {
+                CellLabel.Dispose();
+            }
+            new RoomObject(DCAgent.position, this);
+            UpdatableObject.Remove(DCAgent);
+            DCAgent = null;
+        }
     }
 }

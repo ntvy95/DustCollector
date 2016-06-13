@@ -63,7 +63,8 @@ namespace AgentOrientedProgramming
                 e.Graphics.FillRectangle(b, e.CellBounds);
             }
         }
-        private void Set_Click(Process P, Condition Cond, Procedure StartProcedure, Procedure EndProcedure)
+        private void Set_Click(Process P, Condition Cond = null,
+            Procedure StartProcedure = null, Procedure EndProcedure = null)
         {
             while (true && (Cond == null || Cond()))
             {
@@ -267,11 +268,7 @@ namespace AgentOrientedProgramming
         {
             if (Room.DCAgent != null)
             {
-                Label CellLabel = (Label)Environment.GetControlFromPosition(Room.DCAgent.position.X, Room.DCAgent.position.Y);
-                if (CellLabel != null)
-                {
-                    CellLabel.Dispose();
-                }
+                Room.Remove_Agent();
                 SetManually_Agent_Direction.Enabled = false;
             }
         }
@@ -366,7 +363,12 @@ namespace AgentOrientedProgramming
 
         private void startToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Processing = Process.None;
+            if (Room.DCAgent == null)
+            {
+                SetRandom_Agent_Click(null, null);
+            }
+            Set_Click(Process.None);
+            Environment.RemoveClickEvent();
             editToolStripMenuItem.Enabled = false;
             startToolStripMenuItem.Enabled = false;
             stopToolStripMenuItem.Enabled = true;

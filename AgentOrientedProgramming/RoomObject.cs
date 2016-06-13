@@ -33,7 +33,7 @@ namespace AgentOrientedProgramming
                 room.UpdateRoomObject(p, this);
                 if (Below != null && (Below.type == Process.SetAgent || Below.type == Process.SetObstacles))
                 {
-                    Below = new RoomObject(position, room);
+                    Below = null;
                 }
             }
         }
@@ -46,7 +46,14 @@ namespace AgentOrientedProgramming
                 room.Display.Controls.Remove(c);
                 room.Display.Controls.Add(c, p.X, p.Y);
             }
-            room.UpdateRoomObject(position, Below);
+            if (Below == null)
+            {
+                new RoomObject(position, room);
+            }
+            else
+            {
+                room.UpdateRoomObject(position, Below);
+            }
             Below = room.Map[p.X, p.Y];
             room.UpdateRoomObject(p, this);
         }
@@ -153,7 +160,7 @@ namespace AgentOrientedProgramming
             base.room.DCAgent = this;
             this.InnerPosition = new Point(0, 0);
             this.direction = d;
-            this.Start();
+            this.action = "start";
             room.SynchronizeColor(p);
         }
         public void Turn90()
@@ -180,7 +187,7 @@ namespace AgentOrientedProgramming
         }
         public string getEnvironment()
         {
-            if (Below.type == Process.SetDust)
+            if (Below != null && Below.type == Process.SetDust)
             {
                 return "[Environment : DIRTY]";
             }
@@ -382,7 +389,7 @@ namespace AgentOrientedProgramming
         }
         public bool isDirty()
         {
-            return Below.type == Process.SetDust;
+            return Below != null && Below.type == Process.SetDust;
         }
         public string TypeOfObstacle(Point POS)
         {
