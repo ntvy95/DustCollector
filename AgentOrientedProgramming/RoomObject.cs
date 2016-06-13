@@ -138,7 +138,7 @@ namespace AgentOrientedProgramming
         public int m;
         public int leftmoves;
         public int timePassed;
-        public List<Weight> weight;
+        public Dictionary<Point, int> weight;
         public List<Point> discover;
         public int RelativeDirectionType;
         public Agent(Point p, RoomEnvironment r, string d)
@@ -155,18 +155,6 @@ namespace AgentOrientedProgramming
             this.direction = d;
             this.Start();
             room.SynchronizeColor(p);
-        }
-        public bool Discover(Point p)
-        {
-            foreach (Point d in this.discover)
-            {
-                if (Point.Equals(p, d))
-                {
-                    return true;
-                }
-            }
-            this.discover.Add(p);
-            return false;
         }
         public void Turn90()
         {
@@ -220,7 +208,7 @@ namespace AgentOrientedProgramming
                     break;
             }
             this.InnerPosition = new Point(0, 0);
-            this.weight = new List<Weight>();
+            this.weight = new Dictionary<Point, int>();
             this.discover = new List<Point>();
             this.action = "start";
             this.UpdateInternalState();
@@ -228,7 +216,6 @@ namespace AgentOrientedProgramming
         public override void Update()
         {
             this.Decide();
-            this.UpdateInternalState();
             switch (this.action)
             {
                 case "turn90":
@@ -238,6 +225,7 @@ namespace AgentOrientedProgramming
                     this.Forward();
                     break;
             }
+            this.UpdateInternalState();
         }
         public void UpdateInternalState()
         {
@@ -252,20 +240,42 @@ namespace AgentOrientedProgramming
                 {
                     PlQuery.PlCall("assert(wasin(" + this.InnerPosition.X + "," + this.InnerPosition.Y + "))");
                     PlQuery.PlCall("assert(wasfacing(" + this.a + "))");
-                    PlQuery.PlCall("assert(choosed(" + this.m + "))");
                     PlQuery.PlCall("assert(wastimePassed(" + this.timePassed + "))");
                     PlQuery.PlCall("assert(wasleftmoves(" + this.leftmoves + "))");
 
                     Console.WriteLine("assert(wasin(" + this.InnerPosition.X + "," + this.InnerPosition.Y + "))");
                     Console.WriteLine("assert(wasfacing(" + this.a + "))");
-                    Console.WriteLine("assert(choosed(" + this.m + "))");
                     Console.WriteLine("assert(wastimePassed(" + this.timePassed + "))");
                     Console.WriteLine("assert(wasleftmoves(" + this.leftmoves + "))");
                 }
-                if (this.isDirty())
+                foreach (Point w in this.weight.Keys)
                 {
-                    PlQuery.PlCall("assert(dirty(" + this.InnerPosition.X + "," + this.InnerPosition.Y + "))");
-                    Console.WriteLine("assert(dirty(" + this.InnerPosition.X + "," + this.InnerPosition.Y + "))");
+                    PlQuery.PlCall("assert(wasweight(" + w.X + "," + w.Y + "," + this.weight[w] + "))");
+                    Console.WriteLine("assert(wasweight(" + w.X + "," + w.Y + "," + this.weight[w] + "))");
+                }
+                foreach (Point d in this.discover)
+                {
+                    PlQuery.PlCall("assert(discovered(" + d.X + "," + d.Y + "))");
+                    Console.WriteLine("assert(discovered(" + d.X + "," + d.Y + "))");
+                }
+                using (var q = new PlQuery("in(X, Y)"))
+                {
+                    if (q.Solutions.Count() > 0)
+                    {
+                        PlQueryVariables v = q.SolutionVariables.ElementAt(0);
+                        this.InnerPosition.X = Int32.Parse(v["X"].ToString());
+                        this.InnerPosition.Y = Int32.Parse(v["Y"].ToString());
+                        Console.WriteLine("in(" + this.InnerPosition.X + ", " + this.InnerPosition.Y + ")");
+                    }
+                }
+                using (var q = new PlQuery("facing(X)"))
+                {
+                    if (q.Solutions.Count() > 0)
+                    {
+                        PlQueryVariables v = q.SolutionVariables.ElementAt(0);
+                        this.a = Int32.Parse(v["X"].ToString());
+                        Console.WriteLine("facing(" + this.a + ")");
+                    }
                 }
                 for (int i = 0; i < 4; i++)
                 {
@@ -280,54 +290,16 @@ namespace AgentOrientedProgramming
                     }
                     this.Turn90();
                 }
-                foreach (Weight w in this.weight)
-                {
-                    PlQuery.PlCall("assert(wasweight(" + w.position.X + "," + w.position.Y + "," + w.weight + "))");
-                    Console.WriteLine("assert(wasweight(" + w.position.X + "," + w.position.Y + "," + w.weight + "))");
-                }
-                foreach (Point d in this.discover)
-                {
-                    PlQuery.PlCall("assert(discovered(" + d.X + "," + d.Y + "))");
-                    Console.WriteLine("assert(discovered(" + d.X + "," + d.Y + "))");
-                }
-                using (var q = new PlQuery("facing(X)"))
-                {
-                    if (q.Solutions.Count() > 0)
-                    {
-                        PlQueryVariables v = q.SolutionVariables.ElementAt(0);
-                        this.a = Int32.Parse(v["X"].ToString());
-                        Console.WriteLine("facing(" + this.a + ")");
-                    }
-                }
-                using (var q = new PlQuery("in(X, Y)"))
-                {
-                    if (q.Solutions.Count() > 0)
-                    {
-                        PlQueryVariables v = q.SolutionVariables.ElementAt(0);
-                        this.InnerPosition.X = Int32.Parse(v["X"].ToString());
-                        this.InnerPosition.Y = Int32.Parse(v["Y"].ToString());
-                        Console.WriteLine("in(" + this.InnerPosition.X + ", " + this.InnerPosition.Y + ")");
-                    }
-                }
-                using (var q = new PlQuery("weight(" + this.InnerPosition.X + "," + this.InnerPosition.Y + ", W)"))
+                using (var q = new PlQuery("weight(X, Y, W)"))
                 {
                     if (q.Solutions.Count() > 0)
                     {
                         PlQueryVariables v = q.SolutionVariables.ElementAt(0);
                         if (v["W"].ToString() != "inf")
                         {
-                            this.weight.Add(new Weight(this.InnerPosition.X, this.InnerPosition.Y, Int32.Parse(v["W"].ToString())));
-                            Console.WriteLine("weight(" + this.InnerPosition.X + ", " + this.InnerPosition.Y + ", " + Int32.Parse(v["W"].ToString()) + ")");
+                            this.weight[new Point(Int32.Parse(v["X"].ToString()), Int32.Parse(v["Y"].ToString()))] = Int32.Parse(v["W"].ToString());
+                            Console.WriteLine("weight(" + Int32.Parse(v["X"].ToString()) + ", " + Int32.Parse(v["Y"].ToString()) + ", " + Int32.Parse(v["W"].ToString()) + ")");
                         }
-                    }
-                }
-                using (var q = new PlQuery("choose(X)"))
-                {
-                    if (q.Solutions.Count() > 0)
-                    {
-                        PlQueryVariables v = q.SolutionVariables.ElementAt(0);
-                        this.m = Int32.Parse(v["X"].ToString());
-                        Console.WriteLine("choose(" + this.m + ")");
                     }
                 }
                 using (var q = new PlQuery("discover(X, Y)"))
@@ -368,16 +340,14 @@ namespace AgentOrientedProgramming
                 PlQuery.PlCall("assert(done(" + this.action + "))");
                 PlQuery.PlCall("assert(in(" + this.InnerPosition.X + "," + this.InnerPosition.Y + "))");
                 PlQuery.PlCall("assert(facing(" + this.a + "))");
-                PlQuery.PlCall("assert(choose(" + this.m + "))");
                 PlQuery.PlCall("assert(timePassed(" + this.timePassed + "))");
-                PlQuery.PlCall("assert(wasleftmoves(" + this.leftmoves + "))");
+                PlQuery.PlCall("assert(leftmoves(" + this.leftmoves + "))");
 
                 Console.WriteLine("assert(done(" + this.action + "))");
                 Console.WriteLine("assert(in(" + this.InnerPosition.X + "," + this.InnerPosition.Y + "))");
                 Console.WriteLine("assert(facing(" + this.a + "))");
-                Console.WriteLine("assert(choose(" + this.m + "))");
                 Console.WriteLine("assert(timePassed(" + this.timePassed + "))");
-                Console.WriteLine("assert(wasleftmoves(" + this.leftmoves + "))");
+                Console.WriteLine("assert(leftmoves(" + this.leftmoves + "))");
                 if (this.isDirty())
                 {
                     PlQuery.PlCall("assert(dirty(" + this.InnerPosition.X + "," + this.InnerPosition.Y + "))");
@@ -396,20 +366,16 @@ namespace AgentOrientedProgramming
                     }
                     this.Turn90();
                 }
-                foreach (Weight w in this.weight)
+                foreach (Point w in this.weight.Keys)
                 {
-                    PlQuery.PlCall("assert(weight(" + w.position.X + "," + w.position.Y + "," + w.weight + "))");
-                    Console.WriteLine("assert(weight(" + w.position.X + "," + w.position.Y + "," + w.weight + "))");
-                }
-                foreach (Point d in this.discover)
-                {
-                    PlQuery.PlCall("assert(discover(" + d.X + "," + d.Y + "))");
-                    Console.WriteLine("assert(discover(" + d.X + "," + d.Y + "))");
+                    PlQuery.PlCall("assert(wasweight(" + w.X + "," + w.Y + "," + this.weight[w] + "))");
+                    Console.WriteLine("assert(wasweight(" + w.X + "," + w.Y + "," + this.weight[w] + "))");
                 }
                 using (var q = new PlQuery("do(A)"))
                 {
                     PlQueryVariables v = q.SolutionVariables.ElementAt(0);
                     this.action = v["A"].ToString();
+                    Console.WriteLine("do(" + this.action + ")");
                 }
                 PlEngine.PlCleanup();
             }
@@ -420,6 +386,7 @@ namespace AgentOrientedProgramming
         }
         public string TypeOfObstacle(Point POS)
         {
+            //Console.WriteLine("env_obstacle(" + POS.X + "," + POS.Y + ")");
             if (POS.X < 0 || POS.X >= room.Map.GetLength(0)
                 || POS.Y < 0 || POS.Y >= room.Map.GetLength(1))
             {
