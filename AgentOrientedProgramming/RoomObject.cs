@@ -40,6 +40,12 @@ namespace AgentOrientedProgramming
 
         public void Move(Point p)
         {
+            Control c = room.Display.GetControlFromPosition(position.X, position.Y);
+            if (c != null)
+            {
+                room.Display.Controls.Remove(c);
+                room.Display.Controls.Add(c, p.X, p.Y);
+            }
             room.UpdateRoomObject(position, Below);
             Below = room.Map[p.X, p.Y];
             room.UpdateRoomObject(p, this);
@@ -131,8 +137,10 @@ namespace AgentOrientedProgramming
         public int a;
         public int m;
         public int leftmoves;
+        public int timePassed;
         public List<Weight> weight;
         public List<Point> discover;
+        public int RelativeDirectionType;
         public Agent(Point p, RoomEnvironment r, string d)
             : base(p, r, true)
         {
@@ -143,30 +151,44 @@ namespace AgentOrientedProgramming
             base.color = Agent.objcolor;
             base.type = Agent.objtype;
             base.room.DCAgent = this;
-            this.a = 0;
-            this.m = this.a;
-            this.leftmoves = 1;
-            this.weight = new List<Weight>() { new Weight(this.InnerPosition.X, this.InnerPosition.Y, 1) };
-            this.discover = new List<Point>() { new Point(this.position.X, this.position.Y) };
+            this.InnerPosition = new Point(0, 0);
             this.direction = d;
-            this.action = "[Action : NONE]";
+            this.Start();
             room.SynchronizeColor(p);
         }
-        public string Turn90()
+        public bool Discover(Point p)
         {
-            this.a = this.a + 90;
+            foreach (Point d in this.discover)
+            {
+                if (Point.Equals(p, d))
+                {
+                    return true;
+                }
+            }
+            this.discover.Add(p);
+            return false;
+        }
+        public void Turn90()
+        {
             switch (direction)
             {
                 case "[Agent : UP]":
-                    return "[Agent : LEFT]";
+                    this.direction = "[Agent : LEFT]";
+                    break;
                 case "[Agent : LEFT]":
-                    return "[Agent : DOWN]";
+                    this.direction = "[Agent : DOWN]";
+                    break;
                 case "[Agent : DOWN]":
-                    return "[Agent : RIGHT]";
+                    this.direction = "[Agent : RIGHT]";
+                    break;
                 case "[Agent : RIGHT]":
-                    return "[Agent : UP]";
+                    this.direction = "[Agent : UP]";
+                    break;
             }
-            return null;
+        }
+        public void Forward()
+        {
+            Move(this.upFront());
         }
         public string getEnvironment()
         {
@@ -178,46 +200,216 @@ namespace AgentOrientedProgramming
         }
         public string getAgentState()
         {
-            return getEnvironment() + " " + direction + " " + action;
+            return getEnvironment() + " " + direction + " [ ACTION : " + action.ToUpper() + " ]";
+        }
+        public void Start()
+        {
+            switch (this.direction)
+            {
+                case "[Agent : UP]":
+                    this.RelativeDirectionType = 0;
+                    break;
+                case "[Agent : LEFT]":
+                    this.RelativeDirectionType = 1;
+                    break;
+                case "[Agent : DOWN]":
+                    this.RelativeDirectionType = 2;
+                    break;
+                case "[Agent : RIGHT]":
+                    this.RelativeDirectionType = 3;
+                    break;
+            }
+            this.InnerPosition = new Point(0, 0);
+            this.weight = new List<Weight>();
+            this.discover = new List<Point>();
+            this.action = "start";
+            this.UpdateInternalState();
         }
         public override void Update()
         {
-
+            this.Decide();
+            this.UpdateInternalState();
+            switch (this.action)
+            {
+                case "turn90":
+                    this.Turn90();
+                    break;
+                case "forward":
+                    this.Forward();
+                    break;
+            }
         }
-        public IEnumerable<string> infer()
+        public void UpdateInternalState()
         {
             if (!PlEngine.IsInitialized)
             {
-                String[] param = { "-q" };  // suppressing informational and banner messages
+                string[] param = { "-q" };
                 PlEngine.Initialize(param);
-                PlQuery.PlCall("consult('HutBuiDegToRad')");
-                PlQuery.PlCall("assert(do(" + this.action + "))");
-                PlQuery.PlCall("assert(in(" + this.InnerPosition.X + "," + this.InnerPosition.Y + "))");
-                PlQuery.PlCall("assert(facing(" + this.a + "))");
-                PlQuery.PlCall("assert(choose(" + this.m + "))");
+                PlQuery.PlCall("consult('HutBuiUpdate')");
+                PlQuery.PlCall("assert(done(" + this.action + "))");
+                Console.WriteLine("assert(done(" + this.action + "))");
+                if (this.action != "start")
+                {
+                    PlQuery.PlCall("assert(wasin(" + this.InnerPosition.X + "," + this.InnerPosition.Y + "))");
+                    PlQuery.PlCall("assert(wasfacing(" + this.a + "))");
+                    PlQuery.PlCall("assert(choosed(" + this.m + "))");
+                    PlQuery.PlCall("assert(wastimePassed(" + this.timePassed + "))");
+                    PlQuery.PlCall("assert(wasleftmoves(" + this.leftmoves + "))");
+
+                    Console.WriteLine("assert(wasin(" + this.InnerPosition.X + "," + this.InnerPosition.Y + "))");
+                    Console.WriteLine("assert(wasfacing(" + this.a + "))");
+                    Console.WriteLine("assert(choosed(" + this.m + "))");
+                    Console.WriteLine("assert(wastimePassed(" + this.timePassed + "))");
+                    Console.WriteLine("assert(wasleftmoves(" + this.leftmoves + "))");
+                }
                 if (this.isDirty())
                 {
                     PlQuery.PlCall("assert(dirty(" + this.InnerPosition.X + "," + this.InnerPosition.Y + "))");
+                    Console.WriteLine("assert(dirty(" + this.InnerPosition.X + "," + this.InnerPosition.Y + "))");
                 }
-                if (this.isObstacle())
+                for (int i = 0; i < 4; i++)
                 {
-                    PlQuery.PlCall("assert(obstacle(" + this.upFront().X + "," + this.upFront().Y + "))");
+                    string OsbtacleType = this.TypeOfObstacle(this.upFront());
+                    if (OsbtacleType != null)
+                    {
+                        Point upfront = this.Outer2Inner(this.upFront());
+                        Console.WriteLine("assert(obstacle(" + upfront.X + "," + upfront.Y + ",both))");
+                        Console.WriteLine("assert(obstacle(" + upfront.X + "," + upfront.Y + "," + OsbtacleType + "))");
+                        PlQuery.PlCall("assert(obstacle(" + upfront.X + "," + upfront.Y + ",both))");
+                        PlQuery.PlCall("assert(obstacle(" + upfront.X + "," + upfront.Y + "," + OsbtacleType + "))");
+                    }
+                    this.Turn90();
                 }
-                PlQuery.PlCall("assert(leftmoves(" + this.leftmoves + "))");
+                foreach (Weight w in this.weight)
+                {
+                    PlQuery.PlCall("assert(wasweight(" + w.position.X + "," + w.position.Y + "," + w.weight + "))");
+                    Console.WriteLine("assert(wasweight(" + w.position.X + "," + w.position.Y + "," + w.weight + "))");
+                }
+                foreach (Point d in this.discover)
+                {
+                    PlQuery.PlCall("assert(discovered(" + d.X + "," + d.Y + "))");
+                    Console.WriteLine("assert(discovered(" + d.X + "," + d.Y + "))");
+                }
+                using (var q = new PlQuery("facing(X)"))
+                {
+                    if (q.Solutions.Count() > 0)
+                    {
+                        PlQueryVariables v = q.SolutionVariables.ElementAt(0);
+                        this.a = Int32.Parse(v["X"].ToString());
+                        Console.WriteLine("facing(" + this.a + ")");
+                    }
+                }
+                using (var q = new PlQuery("in(X, Y)"))
+                {
+                    if (q.Solutions.Count() > 0)
+                    {
+                        PlQueryVariables v = q.SolutionVariables.ElementAt(0);
+                        this.InnerPosition.X = Int32.Parse(v["X"].ToString());
+                        this.InnerPosition.Y = Int32.Parse(v["Y"].ToString());
+                        Console.WriteLine("in(" + this.InnerPosition.X + ", " + this.InnerPosition.Y + ")");
+                    }
+                }
+                using (var q = new PlQuery("weight(" + this.InnerPosition.X + "," + this.InnerPosition.Y + ", W)"))
+                {
+                    if (q.Solutions.Count() > 0)
+                    {
+                        PlQueryVariables v = q.SolutionVariables.ElementAt(0);
+                        if (v["W"].ToString() != "inf")
+                        {
+                            this.weight.Add(new Weight(this.InnerPosition.X, this.InnerPosition.Y, Int32.Parse(v["W"].ToString())));
+                            Console.WriteLine("weight(" + this.InnerPosition.X + ", " + this.InnerPosition.Y + ", " + Int32.Parse(v["W"].ToString()) + ")");
+                        }
+                    }
+                }
+                using (var q = new PlQuery("choose(X)"))
+                {
+                    if (q.Solutions.Count() > 0)
+                    {
+                        PlQueryVariables v = q.SolutionVariables.ElementAt(0);
+                        this.m = Int32.Parse(v["X"].ToString());
+                        Console.WriteLine("choose(" + this.m + ")");
+                    }
+                }
+                using (var q = new PlQuery("discover(X, Y)"))
+                {
+                    foreach(PlQueryVariables v in q.SolutionVariables)
+                    {
+                        this.discover.Add(new Point(Int32.Parse(v["X"].ToString()), Int32.Parse(v["Y"].ToString())));
+                        Console.WriteLine("discover(" + Int32.Parse(v["X"].ToString()) + ", " + Int32.Parse(v["Y"].ToString()) + ")");
+                    }
+                }
+                using (var q = new PlQuery("leftmoves(X)"))
+                {
+                    foreach (PlQueryVariables v in q.SolutionVariables)
+                    {
+                        this.leftmoves = Int32.Parse(v["X"].ToString());
+                        Console.WriteLine("leftmoves(" + Int32.Parse(v["X"].ToString()) + ")");
+                    }
+                }
+                using (var q = new PlQuery("timePassed(X)"))
+                {
+                    if (q.Solutions.Count() > 0)
+                    {
+                        PlQueryVariables v = q.SolutionVariables.ElementAt(0);
+                        this.timePassed = Int32.Parse(v["X"].ToString());
+                        Console.WriteLine("timePassed(" + Int32.Parse(v["X"].ToString()) + ")");
+                    }
+                }
+                PlEngine.PlCleanup();
+            }
+        }
+        public void Decide()
+        {
+            if (!PlEngine.IsInitialized)
+            {
+                string[] param = { "-q" };
+                PlEngine.Initialize(param);
+                PlQuery.PlCall("consult('HutBuiAct')");
+                PlQuery.PlCall("assert(done(" + this.action + "))");
+                PlQuery.PlCall("assert(in(" + this.InnerPosition.X + "," + this.InnerPosition.Y + "))");
+                PlQuery.PlCall("assert(facing(" + this.a + "))");
+                PlQuery.PlCall("assert(choose(" + this.m + "))");
+                PlQuery.PlCall("assert(timePassed(" + this.timePassed + "))");
+                PlQuery.PlCall("assert(wasleftmoves(" + this.leftmoves + "))");
+
+                Console.WriteLine("assert(done(" + this.action + "))");
+                Console.WriteLine("assert(in(" + this.InnerPosition.X + "," + this.InnerPosition.Y + "))");
+                Console.WriteLine("assert(facing(" + this.a + "))");
+                Console.WriteLine("assert(choose(" + this.m + "))");
+                Console.WriteLine("assert(timePassed(" + this.timePassed + "))");
+                Console.WriteLine("assert(wasleftmoves(" + this.leftmoves + "))");
+                if (this.isDirty())
+                {
+                    PlQuery.PlCall("assert(dirty(" + this.InnerPosition.X + "," + this.InnerPosition.Y + "))");
+                    Console.WriteLine("assert(dirty(" + this.InnerPosition.X + "," + this.InnerPosition.Y + "))");
+                }
+                for (int i = 0; i < 4; i++)
+                {
+                    string OsbtacleType = this.TypeOfObstacle(this.upFront());
+                    if (OsbtacleType != null)
+                    {
+                        Point upfront = this.Outer2Inner(this.upFront());
+                        Console.WriteLine("assert(obstacle(" + upfront.X + "," + upfront.Y + ",both))");
+                        Console.WriteLine("assert(obstacle(" + upfront.X + "," + upfront.Y + "," + OsbtacleType + "))");
+                        PlQuery.PlCall("assert(obstacle(" + upfront.X + "," + upfront.Y + ",both))");
+                        PlQuery.PlCall("assert(obstacle(" + upfront.X + "," + upfront.Y + "," + OsbtacleType + "))");
+                    }
+                    this.Turn90();
+                }
                 foreach (Weight w in this.weight)
                 {
                     PlQuery.PlCall("assert(weight(" + w.position.X + "," + w.position.Y + "," + w.weight + "))");
+                    Console.WriteLine("assert(weight(" + w.position.X + "," + w.position.Y + "," + w.weight + "))");
                 }
                 foreach (Point d in this.discover)
                 {
                     PlQuery.PlCall("assert(discover(" + d.X + "," + d.Y + "))");
+                    Console.WriteLine("assert(discover(" + d.X + "," + d.Y + "))");
                 }
                 using (var q = new PlQuery("do(A)"))
                 {
-                    PlQuery.PlCall("retract(do(" + this.action + "))");
-                    this.action = q.Variables["A"].ToString();
-                    yield return this.action;
-                    PlQuery.PlCall("assert(do(" + this.action + "))");
+                    PlQueryVariables v = q.SolutionVariables.ElementAt(0);
+                    this.action = v["A"].ToString();
                 }
                 PlEngine.PlCleanup();
             }
@@ -226,12 +418,25 @@ namespace AgentOrientedProgramming
         {
             return Below.type == Process.SetDust;
         }
-        public bool isObstacle()
+        public string TypeOfObstacle(Point POS)
         {
-            Point upfront = upFront();
-            return upfront.X < 0 || upfront.X >= room.Map.GetLength(0)
-                || upfront.Y < 0 || upfront.Y >= room.Map.GetLength(1)
-                || room.Map[upfront.X, upfront.Y].type == Process.SetObstacles;
+            if (POS.X < 0 || POS.X >= room.Map.GetLength(0)
+                || POS.Y < 0 || POS.Y >= room.Map.GetLength(1))
+            {
+                return "static";
+            }
+            else if (room.Map[POS.X, POS.Y].type == Process.SetObstacles)
+            {
+                if (room.Map[POS.X, POS.Y].isMovable)
+                {
+                    return "dynamic";
+                }
+                else
+                {
+                    return "static";
+                }
+            }
+            return null;
         }
         public Point upFront()
         {
@@ -253,9 +458,20 @@ namespace AgentOrientedProgramming
             }
             return upfront;
         }
-        public Point Inner2Outer(Point Inner)
+        public Point Outer2Inner(Point Outer)
         {
-            return new Point(position.X - InnerPosition.X + Inner.X, position.Y - InnerPosition.Y + Inner.Y);
+            switch (this.RelativeDirectionType)
+            {
+                case 0:
+                    return new Point(-Outer.Y + position.Y + InnerPosition.X, -Outer.X + position.X + InnerPosition.Y);
+                case 1:
+                    return new Point(-Outer.X + position.X + InnerPosition.X, Outer.Y - position.Y + InnerPosition.Y);
+                case 2:
+                    return new Point(Outer.Y - position.Y + InnerPosition.X, Outer.X - position.X + InnerPosition.Y);
+                case 3:
+                    return new Point(Outer.X - position.X + InnerPosition.X, -Outer.Y + position.Y + InnerPosition.Y);
+            }
+            return Outer;
         }
     }
     public class Weight

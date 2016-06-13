@@ -359,9 +359,9 @@ namespace AgentOrientedProgramming
 
         private void oneNextToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //string result = Room.DCAgent.infer().ElementAt(0);
-            //Console.WriteLine(result);
             Room.UpdateMap();
+            Environment.GetControlFromPosition(Room.DCAgent.position.X, Room.DCAgent.position.Y).Text
+            = Room.DCAgent.getAgentState();
         }
 
         private void startToolStripMenuItem_Click(object sender, EventArgs e)
@@ -372,6 +372,7 @@ namespace AgentOrientedProgramming
             stopToolStripMenuItem.Enabled = true;
             oneNextToolStripMenuItem.Enabled = true;
             forwardToToolStripMenuItem.Enabled = true;
+            Room.DCAgent.Start();
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)

@@ -1,13 +1,12 @@
 C:\Users\ntvy95\Documents\Visual Studio 2013\Projects\AgentOrientedProgramming\AgentOrientedProgramming\bin\Debug\AgentOrientedProgramming.exe.config
 C:\Users\ntvy95\Documents\Visual Studio 2013\Projects\AgentOrientedProgramming\AgentOrientedProgramming\bin\Debug\AgentOrientedProgramming.exe
 C:\Users\ntvy95\Documents\Visual Studio 2013\Projects\AgentOrientedProgramming\AgentOrientedProgramming\bin\Debug\AgentOrientedProgramming.pdb
+C:\Users\ntvy95\Documents\Visual Studio 2013\Projects\AgentOrientedProgramming\AgentOrientedProgramming\obj\Debug\AgentOrientedProgramming.MainForm.resources
 C:\Users\ntvy95\Documents\Visual Studio 2013\Projects\AgentOrientedProgramming\AgentOrientedProgramming\obj\Debug\AgentOrientedProgramming.Properties.Resources.resources
 C:\Users\ntvy95\Documents\Visual Studio 2013\Projects\AgentOrientedProgramming\AgentOrientedProgramming\obj\Debug\AgentOrientedProgramming.RoomSizeForm.resources
 C:\Users\ntvy95\Documents\Visual Studio 2013\Projects\AgentOrientedProgramming\AgentOrientedProgramming\obj\Debug\AgentOrientedProgramming.SetRandomForm.resources
 C:\Users\ntvy95\Documents\Visual Studio 2013\Projects\AgentOrientedProgramming\AgentOrientedProgramming\obj\Debug\AgentOrientedProgramming.csproj.GenerateResource.Cache
 C:\Users\ntvy95\Documents\Visual Studio 2013\Projects\AgentOrientedProgramming\AgentOrientedProgramming\obj\Debug\AgentOrientedProgramming.exe
 C:\Users\ntvy95\Documents\Visual Studio 2013\Projects\AgentOrientedProgramming\AgentOrientedProgramming\obj\Debug\AgentOrientedProgramming.pdb
-C:\Users\ntvy95\Documents\Visual Studio 2013\Projects\AgentOrientedProgramming\AgentOrientedProgramming\obj\Debug\AgentOrientedProgramming.MainForm.resources
 C:\Users\ntvy95\documents\visual studio 2013\Projects\AgentOrientedProgramming\AgentOrientedProgramming\obj\Debug\AgentOrientedProgramming.csprojResolveAssemblyReference.cache
 C:\Users\ntvy95\documents\visual studio 2013\Projects\AgentOrientedProgramming\AgentOrientedProgramming\bin\Debug\SwiPlCs.dll
-C:\Users\ntvy95\documents\visual studio 2013\Projects\AgentOrientedProgramming\AgentOrientedProgramming\bin\Debug\SwiPlCs.xml
