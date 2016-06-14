@@ -38,6 +38,7 @@ namespace AgentOrientedProgramming
             Environment.Parent = MainPanel;
             Environment.Dock = DockStyle.Fill;
             Environment.CellPaint += Environment_CellPaint;
+            Environment.BackColor = Color.White;
 
             Room = new RoomEnvironment(Environment);
         }
@@ -150,7 +151,7 @@ namespace AgentOrientedProgramming
                     case Process.SetAgent:
                         if (Processing == Process.SetAgent)
                         {
-                            new RoomObject(P, Room);
+                            Room.EmptyFloor(P);
                             Room.DCAgent = null;
                             SetManually_Agent_Direction.Enabled = false;
                             CellLabel.Dispose();
@@ -166,7 +167,7 @@ namespace AgentOrientedProgramming
                             }
                             if (Room.Map[P.X, P.Y].isMovable == isMovable)
                             {
-                                new RoomObject(P, Room);
+                                Room.EmptyFloor(P);
                                 CellLabel.Dispose();
                             }
                             else
@@ -186,9 +187,10 @@ namespace AgentOrientedProgramming
             {
                 Position = Environment.GetCellPositionFromCursorPosition();
             }
-            if (Room.Map[Position.Value.X, Position.Value.Y].type == P)
+            if (Room.Map[Position.Value.X, Position.Value.Y] != null
+                && Room.Map[Position.Value.X, Position.Value.Y].type == P)
             {
-                new RoomObject(Position.Value, Room);
+                Room.EmptyFloor(Position.Value);
             }
             else
             {
@@ -370,18 +372,21 @@ namespace AgentOrientedProgramming
 
         private void startToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Room.DCAgent == null)
+            if (Environment.RowCount > 0 && Environment.ColumnCount > 0)
             {
-                SetRandom_Agent_Click(null, null);
+                if (Room.DCAgent == null)
+                {
+                    SetRandom_Agent_Click(null, null);
+                }
+                Set_Click(Process.None);
+                Environment.RemoveClickEvent();
+                editToolStripMenuItem.Enabled = false;
+                startToolStripMenuItem.Enabled = false;
+                stopToolStripMenuItem.Enabled = true;
+                oneNextToolStripMenuItem.Enabled = true;
+                forwardToToolStripMenuItem.Enabled = true;
+                Room.DCAgent.Start();
             }
-            Set_Click(Process.None);
-            Environment.RemoveClickEvent();
-            editToolStripMenuItem.Enabled = false;
-            startToolStripMenuItem.Enabled = false;
-            stopToolStripMenuItem.Enabled = true;
-            oneNextToolStripMenuItem.Enabled = true;
-            forwardToToolStripMenuItem.Enabled = true;
-            Room.DCAgent.Start();
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)

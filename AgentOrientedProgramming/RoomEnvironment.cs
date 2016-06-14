@@ -25,21 +25,33 @@ namespace AgentOrientedProgramming
         public void SetMap(int width, int height) {
             Map = new RoomObject[width, height];
             bgColors = new Color[width, height];
-            for (int i = 0; i < width; i++)
+        }
+
+        public void EmptyFloor(Point position)
+        {
+            if (Map[position.X, position.Y] != null)
             {
-                for (int j = 0; j < height; j++)
+                bgColors[position.X, position.Y] = RoomObject.objcolor;
+                if (Map[position.X, position.Y].isMovable)
                 {
-                    new RoomObject(new Point(i, j), this);
-                    bgColors[i, j] = Map[i, j].color;
+                    UpdatableObject.Remove(Map[position.X, position.Y]);
                 }
+                Map[position.X, position.Y] = null;
             }
         }
 
         public void UpdateRoomObject(Point p, RoomObject RObject)
         {
             Map[p.X, p.Y] = RObject;
-            RObject.position = p;
-            bgColors[p.X, p.Y] = RObject.color;
+            if (RObject != null)
+            {
+                RObject.position = p;
+                bgColors[p.X, p.Y] = RObject.color;
+            }
+            else
+            {
+                bgColors[p.X, p.Y] = RoomObject.objcolor;
+            }
         }
 
         public void SynchronizeColor(Point p)
@@ -63,7 +75,7 @@ namespace AgentOrientedProgramming
             {
                 CellLabel.Dispose();
             }
-            new RoomObject(DCAgent.position, this);
+            EmptyFloor(DCAgent.position);
             UpdatableObject.Remove(DCAgent);
             DCAgent = null;
         }

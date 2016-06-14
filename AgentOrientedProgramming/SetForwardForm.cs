@@ -24,6 +24,7 @@ namespace AgentOrientedProgramming
             try
             {
                 textBox1.Enabled = false;
+                Refresh();
                 int ForwardTime = Int32.Parse(textBox1.Text);
                 while (ForwardTime > 0)
                 {
@@ -38,6 +39,12 @@ namespace AgentOrientedProgramming
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void SetForwardForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Hide();
+            e.Cancel = true;
         }
     }
 }

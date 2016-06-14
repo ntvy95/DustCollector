@@ -64,8 +64,9 @@ namespace AgentOrientedProgramming
             {
                 Column = r.Next(0, ParentForm.Environment.ColumnCount);
                 Row = r.Next(0, ParentForm.Environment.RowCount);
-                if (ParentForm.Room.Map[Column, Row].type == Process.None
-                    || (AllowedCell != null && AllowedCell.Contains(ParentForm.Room.Map[Column, Row].type) == true))
+                if (ParentForm.Room.Map[Column, Row] == null
+                    || (ParentForm.Room.Map[Column, Row] != null
+                    && AllowedCell != null && AllowedCell.Contains(ParentForm.Room.Map[Column, Row].type) == true))
                 {
                     break;
                 }

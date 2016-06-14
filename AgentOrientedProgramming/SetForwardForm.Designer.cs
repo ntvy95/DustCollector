@@ -63,6 +63,7 @@
             this.MinimumSize = new System.Drawing.Size(244, 117);
             this.Name = "SetForwardForm";
             this.Text = "Forward to...";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SetForwardForm_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

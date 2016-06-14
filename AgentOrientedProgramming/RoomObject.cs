@@ -46,14 +46,7 @@ namespace AgentOrientedProgramming
                 room.Display.Controls.Remove(c);
                 room.Display.Controls.Add(c, p.X, p.Y);
             }
-            if (Below == null)
-            {
-                new RoomObject(position, room);
-            }
-            else
-            {
-                room.UpdateRoomObject(position, Below);
-            }
+            room.UpdateRoomObject(position, Below);
             Below = room.Map[p.X, p.Y];
             room.UpdateRoomObject(p, this);
         }
@@ -113,8 +106,9 @@ namespace AgentOrientedProgramming
                 if (!(nextx < 0 || nexty < 0
                     || nextx >= base.room.Map.GetLength(0)
                     || nexty >= base.room.Map.GetLength(1)
-                    || base.room.Map[nextx, nexty].type == Process.SetObstacles
-                    || base.room.Map[nextx, nexty].type == Process.SetAgent))
+                    || (base.room.Map[nextx, nexty] != null
+                    && (base.room.Map[nextx, nexty].type == Process.SetObstacles
+                    || base.room.Map[nextx, nexty].type == Process.SetAgent))))
                 {
                     base.Move(new Point(nextx, nexty));
                 }
@@ -152,7 +146,8 @@ namespace AgentOrientedProgramming
         {
             if (base.room.DCAgent != null)
             {
-                new RoomObject(base.room.DCAgent.position, r);
+                //new RoomObject(base.room.DCAgent.position, r);
+                r.Remove_Agent();
             }
             base.color = Agent.objcolor;
             base.type = Agent.objtype;
@@ -406,7 +401,7 @@ namespace AgentOrientedProgramming
             {
                 return "static";
             }
-            else if (room.Map[POS.X, POS.Y].type == Process.SetObstacles)
+            else if (room.Map[POS.X, POS.Y] != null && room.Map[POS.X, POS.Y].type == Process.SetObstacles)
             {
                 if (room.Map[POS.X, POS.Y].isMovable)
                 {
