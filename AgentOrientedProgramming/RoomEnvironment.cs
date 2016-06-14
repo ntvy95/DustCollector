@@ -69,7 +69,7 @@ namespace AgentOrientedProgramming
             }
             MForm.Processing = Process.SetDust;
             Random r = new Random();
-            MForm.SRForm.Random(r.Next(0, 2), null);
+            MForm.SRForm.Random(r.Next(-10, 2), null);
             MForm.Processing = Process.None;
             Display.Refresh();
         }
