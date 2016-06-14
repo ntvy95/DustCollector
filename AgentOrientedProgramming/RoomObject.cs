@@ -146,7 +146,6 @@ namespace AgentOrientedProgramming
         {
             if (base.room.DCAgent != null)
             {
-                //new RoomObject(base.room.DCAgent.position, r);
                 r.Remove_Agent();
             }
             base.color = Agent.objcolor;
@@ -220,6 +219,7 @@ namespace AgentOrientedProgramming
         }
         public override void Update()
         {
+            Console.WriteLine("------------------------------------------");
             this.Decide();
             switch (this.action)
             {
@@ -232,8 +232,15 @@ namespace AgentOrientedProgramming
                 case "suck":
                     this.Suck();
                     break;
+                case "start":
+                    this.Start();
+                    break;
             }
-            this.UpdateInternalState();
+            if (this.action != "start")
+            {
+                this.UpdateInternalState();
+            }
+            Console.WriteLine("------------------------------------------");
         }
         public void UpdateInternalState()
         {
@@ -255,16 +262,16 @@ namespace AgentOrientedProgramming
                     Console.WriteLine("assert(wasfacing(" + this.a + "))");
                     Console.WriteLine("assert(wastimePassed(" + this.timePassed + "))");
                     Console.WriteLine("assert(wasleftmoves(" + this.leftmoves + "))");
-                }
-                foreach (Point w in this.weight.Keys)
-                {
-                    PlQuery.PlCall("assert(wasweight(" + w.X + "," + w.Y + "," + this.weight[w] + "))");
-                    Console.WriteLine("assert(wasweight(" + w.X + "," + w.Y + "," + this.weight[w] + "))");
-                }
-                foreach (Point d in this.discover)
-                {
-                    PlQuery.PlCall("assert(discovered(" + d.X + "," + d.Y + "))");
-                    Console.WriteLine("assert(discovered(" + d.X + "," + d.Y + "))");
+                    foreach (Point w in this.weight.Keys)
+                    {
+                        PlQuery.PlCall("assert(wasweight(" + w.X + "," + w.Y + "," + this.weight[w] + "))");
+                        Console.WriteLine("assert(wasweight(" + w.X + "," + w.Y + "," + this.weight[w] + "))");
+                    }
+                    foreach (Point d in this.discover)
+                    {
+                        PlQuery.PlCall("assert(discovered(" + d.X + "," + d.Y + "))");
+                        Console.WriteLine("assert(discovered(" + d.X + "," + d.Y + "))");
+                    }
                 }
                 using (var q = new PlQuery("in(X, Y)"))
                 {

@@ -10,7 +10,7 @@
 :- dynamic facing/1.
 :- dynamic timePassed/1.
 
-do(start) :- done(stop), timePassed(T), T = 21600.
+do(start) :- done(stop), timePassed(T), T = 10.
 do(suck) :- not(done(stop)), in(X,Y), dirty(X,Y).
 do(stop) :- not(done(start)), leftmoves(0).
 /*do(forward) :- not(done(stop)), in(X,Y), not(dirty(X,Y)), choose(M), Temp is M+360, facing(Temp).
