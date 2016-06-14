@@ -70,6 +70,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SetForwardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetForwardForm.Designer.cs">
+      <DependentUpon>SetForwardForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SetRandomForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,6 +97,9 @@
     </Compile>
     <EmbeddedResource Include="RoomSizeForm.resx">
       <DependentUpon>RoomSizeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SetForwardForm.resx">
+      <DependentUpon>SetForwardForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SetRandomForm.resx">
       <DependentUpon>SetRandomForm.cs</DependentUpon>

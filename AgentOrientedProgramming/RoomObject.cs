@@ -106,19 +106,18 @@ namespace AgentOrientedProgramming
             if (isMovable)
             {
                 Random r = new Random();
-                int movex, movey, nextx, nexty;
-                do
-                {
-                    movex = r.Next(-1, 2);
-                    movey = r.Next(-1, 2);
-                    nextx = base.position.X + movex;
+                int movex = r.Next(-1, 2),
+                    movey = r.Next(-1, 2),
+                    nextx = base.position.X + movex,
                     nexty = base.position.Y + movey;
-                } while (nextx < 0 || nexty < 0
+                if (!(nextx < 0 || nexty < 0
                     || nextx >= base.room.Map.GetLength(0)
                     || nexty >= base.room.Map.GetLength(1)
                     || base.room.Map[nextx, nexty].type == Process.SetObstacles
-                    || base.room.Map[nextx, nexty].type == Process.SetAgent);
-                base.Move(new Point(nextx, nexty));
+                    || base.room.Map[nextx, nexty].type == Process.SetAgent))
+                {
+                    base.Move(new Point(nextx, nexty));
+                }
             }
         }
         public string getObstacleState()
@@ -185,9 +184,13 @@ namespace AgentOrientedProgramming
         {
             Move(this.upFront());
         }
+        public void Suck()
+        {
+            Below = null;
+        }
         public string getEnvironment()
         {
-            if (Below != null && Below.type == Process.SetDust)
+            if (isDirty())
             {
                 return "[Environment : DIRTY]";
             }
@@ -230,6 +233,9 @@ namespace AgentOrientedProgramming
                     break;
                 case "forward":
                     this.Forward();
+                    break;
+                case "suck":
+                    this.Suck();
                     break;
             }
             this.UpdateInternalState();
@@ -302,10 +308,11 @@ namespace AgentOrientedProgramming
                     if (q.Solutions.Count() > 0)
                     {
                         PlQueryVariables v = q.SolutionVariables.ElementAt(0);
-                        if (v["W"].ToString() != "inf")
+                        int W;
+                        if (Int32.TryParse(v["W"].ToString(), out W))
                         {
-                            this.weight[new Point(Int32.Parse(v["X"].ToString()), Int32.Parse(v["Y"].ToString()))] = Int32.Parse(v["W"].ToString());
-                            Console.WriteLine("weight(" + Int32.Parse(v["X"].ToString()) + ", " + Int32.Parse(v["Y"].ToString()) + ", " + Int32.Parse(v["W"].ToString()) + ")");
+                            this.weight[new Point(Int32.Parse(v["X"].ToString()), Int32.Parse(v["Y"].ToString()))] = W;
+                            Console.WriteLine("weight(" + Int32.Parse(v["X"].ToString()) + ", " + Int32.Parse(v["Y"].ToString()) + ", " + W + ")");
                         }
                     }
                 }

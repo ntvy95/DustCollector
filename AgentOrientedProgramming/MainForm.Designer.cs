@@ -49,11 +49,11 @@
             this.SetManually_Agent_RIGHT = new System.Windows.Forms.ToolStripMenuItem();
             this.controlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.oneNextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forwardToToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.About = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel = new System.Windows.Forms.Panel();
-            this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -230,6 +230,14 @@
             this.startToolStripMenuItem.Text = "Start";
             this.startToolStripMenuItem.Click += new System.EventHandler(this.startToolStripMenuItem_Click);
             // 
+            // stopToolStripMenuItem
+            // 
+            this.stopToolStripMenuItem.Enabled = false;
+            this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.stopToolStripMenuItem.Text = "Stop";
+            this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
+            // 
             // oneNextToolStripMenuItem
             // 
             this.oneNextToolStripMenuItem.Enabled = false;
@@ -244,6 +252,7 @@
             this.forwardToToolStripMenuItem.Name = "forwardToToolStripMenuItem";
             this.forwardToToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.forwardToToolStripMenuItem.Text = "Forward to...";
+            this.forwardToToolStripMenuItem.Click += new System.EventHandler(this.forwardToToolStripMenuItem_Click);
             // 
             // About
             // 
@@ -262,14 +271,6 @@
             this.MainPanel.Name = "MainPanel";
             this.MainPanel.Size = new System.Drawing.Size(334, 284);
             this.MainPanel.TabIndex = 2;
-            // 
-            // stopToolStripMenuItem
-            // 
-            this.stopToolStripMenuItem.Enabled = false;
-            this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
-            this.stopToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.stopToolStripMenuItem.Text = "Stop";
-            this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
             // MainForm
             // 

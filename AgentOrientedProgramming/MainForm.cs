@@ -20,6 +20,7 @@ namespace AgentOrientedProgramming
         //private Agent DCAgent;
         private RoomSizeForm RSForm;
         private SetRandomForm SRForm;
+        private SetForwardForm SFForm;
         //private Point AgentPosition;
         private delegate void Procedure();
         private delegate bool Condition();
@@ -30,6 +31,7 @@ namespace AgentOrientedProgramming
             this.Text = "Dust Collector";
             RSForm = new RoomSizeForm(this);
             SRForm = new SetRandomForm(this);
+            SFForm = new SetForwardForm(this);
             Processing = Process.None;
 
             Environment = new TableLayoutPanel();
@@ -359,7 +361,7 @@ namespace AgentOrientedProgramming
             MessageBox.Show("DUST COLLECTOR");
         }
 
-        private void oneNextToolStripMenuItem_Click(object sender, EventArgs e)
+        public void oneNextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Room.UpdateMap();
             Environment.GetControlFromPosition(Room.DCAgent.position.X, Room.DCAgent.position.Y).Text
@@ -389,6 +391,18 @@ namespace AgentOrientedProgramming
             stopToolStripMenuItem.Enabled = false;
             oneNextToolStripMenuItem.Enabled = false;
             forwardToToolStripMenuItem.Enabled = false;
+        }
+
+        private void forwardToToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (SFForm.IsAccessible)
+            {
+                SFForm.Focus();
+            }
+            else
+            {
+                SFForm.Show();
+            }
         }
     }
     public enum Process
