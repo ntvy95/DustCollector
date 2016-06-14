@@ -12,11 +12,11 @@ namespace AgentOrientedProgramming
     {
         public Color[,] bgColors;
         public RoomObject[,] Map;
-        public TableLayoutPanel Display;
+        public DBLayoutPanel Display;
         public Agent DCAgent; //in environment's coordination.
         public List<RoomObject> UpdatableObject;
 
-        public RoomEnvironment(TableLayoutPanel d)
+        public RoomEnvironment(DBLayoutPanel d)
         {
             Display = d;
             UpdatableObject = new List<RoomObject>();

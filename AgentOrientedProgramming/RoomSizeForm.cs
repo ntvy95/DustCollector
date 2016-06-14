@@ -40,6 +40,7 @@ namespace AgentOrientedProgramming
                 ParentForm.Environment.Controls.Clear();
                 ParentForm.Environment.RowStyles.Clear();
                 ParentForm.Environment.ColumnStyles.Clear();
+                ParentForm.Room = new RoomEnvironment(ParentForm.Environment);
                 ParentForm.Room.SetMap(RoomWidth, RoomHeight);
                 for (int i = 0; i < RoomWidth; i++)
                 {

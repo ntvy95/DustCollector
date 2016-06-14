@@ -9,30 +9,17 @@
 :- dynamic wasfacing/1.
 :- dynamic wastimePassed/1.
 
-%r8
 in(0,0) :- done(start).
 leftmoves(0) :- done(start), assert(wasleftmoves(0)).
 facing(0) :- done(start).
 discover(0,0) :- done(start), assert(discovered(0,0)).
 timePassed(0) :- done(start).
 
-
 facing(Temp):- wasfacing(A), Temp is A+90, done(turn90).
 facing(A):-wasfacing(A),done(forward).
-%r2 { in(X, Y), facing(A), weight(X, Y, W), do(forward) } → { in(X + round(cos(pi*A/180)), Y + round(sin(pi*A/180))), weight(X, Y, W + 1), choose(A) }
 in(Temp1, Temp2):- wasin(X,Y), wasfacing(A), Temp1 is X + round(cos(pi*A/180)), Temp2 is Y + round(sin(pi*A/180)), done(forward).
 weight(X,Y,Temp):- wasin(X,Y), (wasweight(X,Y,W);W is 0), Temp is W+1, done(forward).
-/*choose(A):- wasfacing(A), done(forward).
-choose(A):- wasin(X,Y), wasfacing(A), choosed(M), Temp1 is X + round(cos(pi*M/180)), Temp2 is Y + round(sin(pi*M/180)), obstacle(Temp1, Temp2, both), done(turn90).
-choose(A):- wasfacing(A), choosed(M), wasin(X, Y), Temp1 is X + round(cos(pi*M/180)), Temp2 is Y + round(sin(pi*M/180)), not(obstacle(Temp1, Temp2,both)), Temp3 is X + round(cos(pi*A/180)), Temp4 is Y + round(sin(pi*A/180)), not(obstacle(Temp3, Temp4, both)), wasweight(Temp3, Temp4, W1), wasweight(Temp1, Temp2, W2), W1 < W2,  done(turn90).
-%%r5 { facing(a), in(X, Y), not(obstacle(x + round(cos(pi*A/180)), y + round(sin(pi*A/180)), static)), not(discover(x + round(cos(pi*A/180)), y + round(sin(pi*A/180)))), leftmoves(k) } → { discover(x + round(cos(pi*A/180)), y + round(sin(pi*A/180))), leftmoves(k + 1) }*/
-
 discover(Temp1, Temp2):- (done(forward);done(start)),in(X,Y), facing(M), (A is M;A is M+90;A is M+180;A is M+270), Temp1 is X + round(cos(pi*A/180)), Temp2 is Y + round(sin(pi*A/180)), not(obstacle(Temp1, Temp2, static)), not(discovered(Temp1, Temp2)).
 leftmoves(TempK):- (done(forward);done(start)), in(X,Y), facing(M), (A is M;A is M+90;A is M+180;A is M+270), Temp1 is X + round(cos(pi*A/180)), Temp2 is Y + round(sin(pi*A/180)), not(obstacle(Temp1, Temp2, static)), not(discovered(Temp1, Temp2)), wasleftmoves(K), TempK is K + 1, retract(wasleftmoves(K)), assert(wasleftmoves(TempK)).
 leftmoves(TempK):- in(X,Y), not(wasweight(X,Y,_)), wasleftmoves(K), TempK is K - 1, retract(wasleftmoves(K)), assert(wasleftmoves(TempK)), done(forward).
-/*discover(Temp1, Temp2):- not(done(stop)), wasfacing(A), wasin(X,Y), Temp1 is X + round(cos(pi*A/180)), Temp2 is Y + round(sin(pi*A/180)), not(obstacle(Temp1, Temp2, static)), not(discovered(Temp1, Temp2)).
-leftmoves(TempK):- not(done(stop)), wasfacing(A), wasin(X,Y), Temp1 is X
-+ round(cos(pi*A/180)), Temp2 is Y + round(sin(pi*A/180)),
-not(obstacle(Temp1, Temp2, static)), not(discovered(Temp1, Temp2)),
-wasleftmoves(K), TempK is K + 1.*/
 timePassed(Temp):- wastimePassed(T), Temp is T+1, done(stop).

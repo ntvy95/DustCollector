@@ -54,6 +54,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DBLayoutPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="RoomEnvironment.cs" />
     <Compile Include="RoomObject.cs" />
     <Compile Include="RoomSizeForm.cs">

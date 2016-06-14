@@ -15,13 +15,11 @@ namespace AgentOrientedProgramming
     public partial class MainForm : Form
     {
         public RoomEnvironment Room;
-        public TableLayoutPanel Environment;
+        public DBLayoutPanel Environment;
         public Process Processing;
-        //private Agent DCAgent;
         private RoomSizeForm RSForm;
         private SetRandomForm SRForm;
         private SetForwardForm SFForm;
-        //private Point AgentPosition;
         private delegate void Procedure();
         private delegate bool Condition();
         
@@ -34,7 +32,7 @@ namespace AgentOrientedProgramming
             SFForm = new SetForwardForm(this);
             Processing = Process.None;
 
-            Environment = new TableLayoutPanel();
+            Environment = new DBLayoutPanel();
             Environment.Parent = MainPanel;
             Environment.Dock = DockStyle.Fill;
             Environment.CellPaint += Environment_CellPaint;
