@@ -28,8 +28,8 @@ namespace AgentOrientedProgramming
 
         private void button_OK_Click(object sender, EventArgs e)
         {
-            try
-            {
+            //try
+            //{
                 int NumberOfRandom_number = Int32.Parse(NumberOfRandom.Text);
                 if (NumberOfRandom_number > ParentForm.Environment.ColumnCount * ParentForm.Environment.RowCount)
                 {
@@ -38,25 +38,29 @@ namespace AgentOrientedProgramming
                 Random(NumberOfRandom_number);
                 ParentForm.Processing = Process.None;
                 Hide();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message);
+            //}
         }
 
         public void Random(int N, HashSet<Process> AllowedCell = null)
         {
-            Point Position = new Point();
+            Point? Position = null;
             while (N > 0)
             {
                 Position = Random_ColumnRow(AllowedCell);
+                if (Position == null)
+                {
+                    break;
+                }
                 ParentForm.Environment_Click(ParentForm.Processing, Position);
                 N = N - 1;
             }
         }
 
-        private Point Random_ColumnRow(HashSet<Process> AllowedCell = null)
+        private Point? Random_ColumnRow(HashSet<Process> AllowedCell = null)
         {
             Random r = new Random();
             int Column, Row;
@@ -72,12 +76,13 @@ namespace AgentOrientedProgramming
                         || (ParentForm.Room.Map[Column, Row] != null
                         && AllowedCell != null && AllowedCell.Contains(ParentForm.Room.Map[Column, Row].type) == true))
                     {
-                        break;
+                        return new Point(Column, Row);
                     }
                     countleft = countleft - 1;
+                    found[Column, Row] = true;
                 }
             } while (countleft > 0);
-            return new Point(Column, Row);
+            return null;
         }
 
         private void SetRandomForm_Load(object sender, EventArgs e)

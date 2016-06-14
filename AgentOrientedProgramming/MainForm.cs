@@ -148,7 +148,7 @@ namespace AgentOrientedProgramming
                 {
                     CellLabel.Dispose();
                 }
-                else
+                else if (Processing != Process.None)
                 {
                     switch (Room.Map[P.X, P.Y].type)
                     {
@@ -177,7 +177,7 @@ namespace AgentOrientedProgramming
                                 else
                                 {
                                     Room.Map[P.X, P.Y].UpdateMovableState(isMovable);
-                                    CellLabel.Text = ((Obstacle)Room.Map[P.X, P.Y]).getObstacleState();
+                                    CellLabel.Text = ((Obstacle)Room.Map[P.X, P.Y]).ToString();
                                 }
                             }
                             break;
@@ -185,6 +185,31 @@ namespace AgentOrientedProgramming
                 }
                 Environment.Refresh();
             };
+        }
+        public Label Create_CellLabel(RoomObject RObject)
+        {
+            Label CellLabel = new Label();
+            CellLabel.AutoSize = false;
+            CellLabel.Dock = DockStyle.Fill;
+            CellLabel.TextAlign = ContentAlignment.MiddleCenter;
+            CellLabel.BackColor = Color.Transparent;
+            Click_CellLabel(RObject.position, CellLabel);
+            Environment.Controls.Add(CellLabel, RObject.position.X, RObject.position.Y);
+            Update_CellLabel(CellLabel, RObject);
+            return CellLabel;
+        }
+        public void Update_CellLabel(Label CellLabel, RoomObject RObject)
+        {
+            CellLabel.Text = RObject.ToString();
+            switch (RObject.type)
+            {
+                case Process.SetObstacles:
+                    CellLabel.ForeColor = Color.White;
+                    break;
+                case Process.SetAgent:
+                    CellLabel.ForeColor = Color.Black;
+                    break;
+            }
         }
         public Point Environment_Click(Process P, Point? Position = null, bool isMovable = false)
         {
@@ -199,43 +224,29 @@ namespace AgentOrientedProgramming
             }
             else
             {
-                string CellText = null;
+                RoomObject RObject = null;
                 switch (P)
                 {
                     case Process.SetAgent:
-                        new Agent(Position.Value, Room, "[Agent : UP]");
-                        CellText = Room.DCAgent.getAgentState();
+                        RObject = new Agent(Position.Value, Room, "[Agent : UP]");
                         break;
                     case Process.SetDust:
-                        new Dust(Position.Value, Room);
+                        RObject = new Dust(Position.Value, Room);
                         break;
                     case Process.SetObstacles:
-                        new Obstacle(Position.Value, Room, isMovable);
-                        CellText = ((Obstacle)Room.Map[Position.Value.X, Position.Value.Y]).getObstacleState();
+                        RObject = new Obstacle(Position.Value, Room, isMovable);
                         break;
                 }
-                Label CellLabel = (Label)Environment.GetControlFromPosition(Position.Value.X, Position.Value.Y);
-                if (CellText != null)
+                if (RObject != null && RObject.ToString() != null)
                 {
+                    Label CellLabel = (Label)Environment.GetControlFromPosition(Position.Value.X, Position.Value.Y);
                     if (CellLabel == null)
                     {
-                        CellLabel = new Label();
-                        CellLabel.AutoSize = false;
-                        CellLabel.Dock = DockStyle.Fill;
-                        CellLabel.TextAlign = ContentAlignment.MiddleCenter;
-                        CellLabel.BackColor = Color.Transparent;
-                        Click_CellLabel(Position.Value, CellLabel);
-                        Environment.Controls.Add(CellLabel, Position.Value.X, Position.Value.Y);
+                        CellLabel = Create_CellLabel(RObject);
                     }
-                    CellLabel.Text = CellText;
-                    switch (P)
+                    else
                     {
-                        case Process.SetObstacles:
-                            CellLabel.ForeColor = Color.White;
-                            break;
-                        case Process.SetAgent:
-                            CellLabel.ForeColor = Color.Black;
-                            break;
+                        Update_CellLabel(CellLabel, RObject);
                     }
                 }
             }
@@ -291,7 +302,7 @@ namespace AgentOrientedProgramming
         {
             Room.DCAgent.direction = Direction;
             Environment.GetControlFromPosition(Room.DCAgent.position.X, Room.DCAgent.position.Y).Text
-            = Room.DCAgent.getAgentState();
+            = Room.DCAgent.ToString();
         }
         private void SetManually_Agent_UP_Click(object sender, EventArgs e)
         {
@@ -372,7 +383,7 @@ namespace AgentOrientedProgramming
         {
             Room.UpdateMap();
             Environment.GetControlFromPosition(Room.DCAgent.position.X, Room.DCAgent.position.Y).Text
-            = Room.DCAgent.getAgentState();
+            = Room.DCAgent.ToString();
         }
 
         private void startToolStripMenuItem_Click(object sender, EventArgs e)

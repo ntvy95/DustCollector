@@ -68,6 +68,11 @@ namespace AgentOrientedProgramming
         {
 
         }
+
+        public virtual string ToString()
+        {
+            return null;
+        }
     }
 
     public class Dust : RoomObject
@@ -114,7 +119,7 @@ namespace AgentOrientedProgramming
                 }
             }
         }
-        public string getObstacleState()
+        public override string ToString()
         {
             if (isMovable)
             {
@@ -190,7 +195,7 @@ namespace AgentOrientedProgramming
             }
             return "[Environment : CLEAN]";
         }
-        public string getAgentState()
+        public override string ToString()
         {
             return getEnvironment() + " " + direction + " [ ACTION : " + action.ToUpper() + " ]";
         }
