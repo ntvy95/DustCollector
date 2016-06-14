@@ -58,9 +58,14 @@ namespace AgentOrientedProgramming
 
         void Environment_CellPaint(object sender, TableLayoutCellPaintEventArgs e)
         {
-            using (var b = new SolidBrush(Room.bgColors[e.Column, e.Row]))
+            if (e.Column >= 0 && e.Row >=0
+                && e.Column < Room.bgColors.GetLength(0)
+                && e.Row < Room.bgColors.GetLength(1))
             {
-                e.Graphics.FillRectangle(b, e.CellBounds);
+                using (var b = new SolidBrush(Room.bgColors[e.Column, e.Row]))
+                {
+                    e.Graphics.FillRectangle(b, e.CellBounds);
+                }
             }
         }
         private void Set_Click(Process P, Condition Cond = null,

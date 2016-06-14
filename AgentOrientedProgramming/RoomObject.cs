@@ -114,10 +114,10 @@ namespace AgentOrientedProgramming
                     nextx = base.position.X + movex;
                     nexty = base.position.Y + movey;
                 } while (nextx < 0 || nexty < 0
+                    || nextx >= base.room.Map.GetLength(0)
+                    || nexty >= base.room.Map.GetLength(1)
                     || base.room.Map[nextx, nexty].type == Process.SetObstacles
                     || base.room.Map[nextx, nexty].type == Process.SetAgent);
-                Label CellLabel = (Label)room.Display.GetControlFromPosition(position.X, position.Y);
-                room.Display.Controls.Add(CellLabel, nextx, nexty);
                 base.Move(new Point(nextx, nexty));
             }
         }
