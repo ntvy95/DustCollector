@@ -18,7 +18,7 @@ namespace AgentOrientedProgramming
         public DBLayoutPanel Environment;
         public Process Processing;
         private RoomSizeForm RSForm;
-        private SetRandomForm SRForm;
+        public SetRandomForm SRForm;
         private SetForwardForm SFForm;
         private delegate void Procedure();
         private delegate bool Condition();
@@ -38,7 +38,7 @@ namespace AgentOrientedProgramming
             Environment.CellPaint += Environment_CellPaint;
             Environment.BackColor = Color.White;
 
-            Room = new RoomEnvironment(Environment);
+            Room = new RoomEnvironment(Environment, this);
         }
 
         public Color ColorByProcess(Process p)
@@ -401,6 +401,7 @@ namespace AgentOrientedProgramming
             stopToolStripMenuItem.Enabled = false;
             oneNextToolStripMenuItem.Enabled = false;
             forwardToToolStripMenuItem.Enabled = false;
+            SFForm.Hide();
         }
 
         private void forwardToToolStripMenuItem_Click(object sender, EventArgs e)

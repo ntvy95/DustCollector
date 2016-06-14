@@ -15,10 +15,12 @@ namespace AgentOrientedProgramming
         public DBLayoutPanel Display;
         public Agent DCAgent; //in environment's coordination.
         public List<RoomObject> UpdatableObject;
+        public MainForm MForm;
 
-        public RoomEnvironment(DBLayoutPanel d)
+        public RoomEnvironment(DBLayoutPanel d, MainForm MF)
         {
             Display = d;
+            MForm = MF;
             UpdatableObject = new List<RoomObject>();
         }
 
@@ -65,6 +67,10 @@ namespace AgentOrientedProgramming
             {
                 RObj.Update();
             }
+            MForm.Processing = Process.SetDust;
+            Random r = new Random();
+            MForm.SRForm.Random(r.Next(0, 2));
+            MForm.Processing = Process.None;
             Display.Refresh();
         }
 

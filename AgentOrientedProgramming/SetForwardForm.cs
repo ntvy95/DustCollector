@@ -21,8 +21,8 @@ namespace AgentOrientedProgramming
 
         private void button1_Click(object sender, EventArgs e)
         {
-            try
-            {
+            //try
+            //{
                 textBox1.Enabled = false;
                 Refresh();
                 int ForwardTime = Int32.Parse(textBox1.Text);
@@ -34,11 +34,11 @@ namespace AgentOrientedProgramming
                     ForwardTime = ForwardTime - 1;
                 }
                 textBox1.Enabled = true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message);
+            //}
         }
 
         private void SetForwardForm_FormClosing(object sender, FormClosingEventArgs e)
