@@ -146,37 +146,44 @@ namespace AgentOrientedProgramming
         {
             CellLabel.MouseDown += (object s, MouseEventArgs ev) =>
             {
-                switch (Room.Map[P.X, P.Y].type)
+                if (Room.Map[P.X, P.Y] == null)
                 {
-                    case Process.SetAgent:
-                        if (Processing == Process.SetAgent)
-                        {
-                            Room.EmptyFloor(P);
-                            Room.DCAgent = null;
-                            SetManually_Agent_Direction.Enabled = false;
-                            CellLabel.Dispose();
-                        }
-                        break;
-                    case Process.SetObstacles:
-                        if (Processing == Process.SetObstacles)
-                        {
-                            bool isMovable = false;
-                            if (ev.Button == MouseButtons.Right)
-                            {
-                                isMovable = true;
-                            }
-                            if (Room.Map[P.X, P.Y].isMovable == isMovable)
+                    CellLabel.Dispose();
+                }
+                else
+                {
+                    switch (Room.Map[P.X, P.Y].type)
+                    {
+                        case Process.SetAgent:
+                            if (Processing == Process.SetAgent)
                             {
                                 Room.EmptyFloor(P);
+                                Room.DCAgent = null;
+                                SetManually_Agent_Direction.Enabled = false;
                                 CellLabel.Dispose();
                             }
-                            else
+                            break;
+                        case Process.SetObstacles:
+                            if (Processing == Process.SetObstacles)
                             {
-                                Room.Map[P.X, P.Y].UpdateMovableState(isMovable);
-                                CellLabel.Text = ((Obstacle)Room.Map[P.X, P.Y]).getObstacleState();
+                                bool isMovable = false;
+                                if (ev.Button == MouseButtons.Right)
+                                {
+                                    isMovable = true;
+                                }
+                                if (Room.Map[P.X, P.Y].isMovable == isMovable)
+                                {
+                                    Room.EmptyFloor(P);
+                                    CellLabel.Dispose();
+                                }
+                                else
+                                {
+                                    Room.Map[P.X, P.Y].UpdateMovableState(isMovable);
+                                    CellLabel.Text = ((Obstacle)Room.Map[P.X, P.Y]).getObstacleState();
+                                }
                             }
-                        }
-                        break;
+                            break;
+                    }
                 }
                 Environment.Refresh();
             };
