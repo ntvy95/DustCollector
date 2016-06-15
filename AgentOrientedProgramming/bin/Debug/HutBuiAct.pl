@@ -28,6 +28,6 @@ min([A1,B1],[_,B2],[A1,B1]) :- (number(B1),number(B2),B2>B1;B1=B2;B2=inf,number(
 min([_,B1],[A2,B2],[A2,B2]) :- (number(B1),number(B2),B1>B2;B1=inf,number(B2)).
 
 weight(X,Y,inf):-obstacle(X,Y,static).
-weight(X,Y,1.5):-obstacle(X,Y,dynamic).
+weight(X,Y,0.5):-obstacle(X,Y,dynamic).
 weight(X,Y,0):-not(wasweight(X,Y,_)), not(obstacle(X,Y,both)),integer(X),integer(Y).
 weight(X,Y,W):-wasweight(X,Y,W).

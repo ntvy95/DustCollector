@@ -10,3 +10,4 @@ C:\Users\ntvy95\Documents\Visual Studio 2013\Projects\AgentOrientedProgramming\A
 C:\Users\ntvy95\Documents\Visual Studio 2013\Projects\AgentOrientedProgramming\AgentOrientedProgramming\obj\Debug\AgentOrientedProgramming.pdb
 C:\Users\ntvy95\documents\visual studio 2013\Projects\AgentOrientedProgramming\AgentOrientedProgramming\bin\Debug\SwiPlCs.dll
 C:\Users\ntvy95\documents\visual studio 2013\Projects\AgentOrientedProgramming\AgentOrientedProgramming\obj\Debug\AgentOrientedProgramming.SetForwardForm.resources
+C:\Users\ntvy95\Documents\Visual Studio 2013\Projects\AgentOrientedProgramming\AgentOrientedProgramming\obj\Debug\AgentOrientedProgramming.csprojResolveAssemblyReference.cache
