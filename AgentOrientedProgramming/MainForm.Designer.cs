@@ -30,7 +30,6 @@
         {
             this.MainMenu = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.inputFromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setRoomsSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setObstaclesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,6 +53,8 @@
             this.forwardToToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.About = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel = new System.Windows.Forms.Panel();
+            this.selectPROLOGDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.MainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -73,16 +74,10 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.inputFromFileToolStripMenuItem});
+            this.selectPROLOGDirectoryToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
-            // 
-            // inputFromFileToolStripMenuItem
-            // 
-            this.inputFromFileToolStripMenuItem.Name = "inputFromFileToolStripMenuItem";
-            this.inputFromFileToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-            this.inputFromFileToolStripMenuItem.Text = "Input from file...";
             // 
             // editToolStripMenuItem
             // 
@@ -226,7 +221,7 @@
             // startToolStripMenuItem
             // 
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.startToolStripMenuItem.Text = "Start";
             this.startToolStripMenuItem.Click += new System.EventHandler(this.startToolStripMenuItem_Click);
             // 
@@ -234,7 +229,7 @@
             // 
             this.stopToolStripMenuItem.Enabled = false;
             this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
-            this.stopToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.stopToolStripMenuItem.Text = "Stop";
             this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
@@ -242,7 +237,7 @@
             // 
             this.oneNextToolStripMenuItem.Enabled = false;
             this.oneNextToolStripMenuItem.Name = "oneNextToolStripMenuItem";
-            this.oneNextToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.oneNextToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.oneNextToolStripMenuItem.Text = "One next";
             this.oneNextToolStripMenuItem.Click += new System.EventHandler(this.oneNextToolStripMenuItem_Click);
             // 
@@ -250,7 +245,7 @@
             // 
             this.forwardToToolStripMenuItem.Enabled = false;
             this.forwardToToolStripMenuItem.Name = "forwardToToolStripMenuItem";
-            this.forwardToToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.forwardToToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.forwardToToolStripMenuItem.Text = "Forward to...";
             this.forwardToToolStripMenuItem.Click += new System.EventHandler(this.forwardToToolStripMenuItem_Click);
             // 
@@ -271,6 +266,13 @@
             this.MainPanel.Name = "MainPanel";
             this.MainPanel.Size = new System.Drawing.Size(334, 284);
             this.MainPanel.TabIndex = 2;
+            // 
+            // selectPROLOGDirectoryToolStripMenuItem
+            // 
+            this.selectPROLOGDirectoryToolStripMenuItem.Name = "selectPROLOGDirectoryToolStripMenuItem";
+            this.selectPROLOGDirectoryToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.selectPROLOGDirectoryToolStripMenuItem.Text = "Select PROLOG directory";
+            this.selectPROLOGDirectoryToolStripMenuItem.Click += new System.EventHandler(this.selectPROLOGDirectoryToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -294,7 +296,6 @@
 
         private System.Windows.Forms.MenuStrip MainMenu;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem inputFromFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setRoomsSizeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setObstaclesToolStripMenuItem;
@@ -318,6 +319,8 @@
         private System.Windows.Forms.ToolStripMenuItem oneNextToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem forwardToToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectPROLOGDirectoryToolStripMenuItem;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
     }
 }
 

@@ -31,7 +31,7 @@ namespace AgentOrientedProgramming
             //try
             //{
                 int NumberOfRandom_number = Int32.Parse(NumberOfRandom.Text);
-                if (NumberOfRandom_number > ParentForm.Environment.ColumnCount * ParentForm.Environment.RowCount)
+                if (NumberOfRandom_number > ParentForm.RoomDisplay.ColumnCount * ParentForm.RoomDisplay.RowCount)
                 {
                     throw new Exception("The number cannot exceed the size of the room!");
                 }
@@ -64,12 +64,12 @@ namespace AgentOrientedProgramming
         {
             Random r = new Random();
             int Column, Row;
-            bool[,] found = new bool[ParentForm.Environment.ColumnCount, ParentForm.Environment.RowCount];
-            int countleft = ParentForm.Environment.ColumnCount * ParentForm.Environment.RowCount;
+            bool[,] found = new bool[ParentForm.RoomDisplay.ColumnCount, ParentForm.RoomDisplay.RowCount];
+            int countleft = ParentForm.RoomDisplay.ColumnCount * ParentForm.RoomDisplay.RowCount;
             do
             {
-                Column = r.Next(0, ParentForm.Environment.ColumnCount);
-                Row = r.Next(0, ParentForm.Environment.RowCount);
+                Column = r.Next(0, ParentForm.RoomDisplay.ColumnCount);
+                Row = r.Next(0, ParentForm.RoomDisplay.RowCount);
                 if (!found[Column, Row])
                 {
                     if (ParentForm.Room.Map[Column, Row] == null

@@ -18,7 +18,6 @@ namespace AgentOrientedProgramming
         [STAThread]
         static void Main()
         {
-            Environment.SetEnvironmentVariable("SWI_HOME_DIR", @"C:\Program Files (x86)\swipl\");
             Environment.SetEnvironmentVariable("SWI_HOME_DIR", @"C:\Program Files\swipl\");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

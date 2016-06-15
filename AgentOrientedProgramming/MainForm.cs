@@ -9,13 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExtensionMethods;
 using System.Diagnostics;
+using System.IO;
 
 namespace AgentOrientedProgramming
 {
     public partial class MainForm : Form
     {
         public RoomEnvironment Room;
-        public DBLayoutPanel Environment;
+        public DBLayoutPanel RoomDisplay;
         public Process Processing;
         private RoomSizeForm RSForm;
         public SetRandomForm SRForm;
@@ -32,13 +33,13 @@ namespace AgentOrientedProgramming
             SFForm = new SetForwardForm(this);
             Processing = Process.None;
 
-            Environment = new DBLayoutPanel();
-            Environment.Parent = MainPanel;
-            Environment.Dock = DockStyle.Fill;
-            Environment.CellPaint += Environment_CellPaint;
-            Environment.BackColor = Color.White;
+            RoomDisplay = new DBLayoutPanel();
+            RoomDisplay.Parent = MainPanel;
+            RoomDisplay.Dock = DockStyle.Fill;
+            RoomDisplay.CellPaint += Environment_CellPaint;
+            RoomDisplay.BackColor = Color.White;
 
-            Room = new RoomEnvironment(Environment, this);
+            Room = new RoomEnvironment(RoomDisplay, this);
         }
 
         public Color ColorByProcess(Process p)
@@ -108,12 +109,12 @@ namespace AgentOrientedProgramming
             Set_Click(P,
                 () =>
                 {
-                    return Environment.RowCount > 0 && Environment.ColumnCount > 0;
+                    return RoomDisplay.RowCount > 0 && RoomDisplay.ColumnCount > 0;
                 },
                 () =>
                 {
                     Processing = P;
-                    Environment.MouseDown += EHandler;
+                    RoomDisplay.MouseDown += EHandler;
                     MItem.Text = "Stop setting manually";
                     if (StartProcedure != null)
                         StartProcedure();
@@ -121,7 +122,7 @@ namespace AgentOrientedProgramming
                 () =>
                 {
                     Processing = Process.None;
-                    Environment.MouseDown -= EHandler;
+                    RoomDisplay.MouseDown -= EHandler;
                     MItem.Text = "Set manually";
                     if (EndProcedure != null)
                         EndProcedure();
@@ -183,7 +184,7 @@ namespace AgentOrientedProgramming
                             break;
                     }
                 }
-                Environment.Refresh();
+                RoomDisplay.Refresh();
             };
         }
         public Label Create_CellLabel(RoomObject RObject)
@@ -194,7 +195,7 @@ namespace AgentOrientedProgramming
             CellLabel.TextAlign = ContentAlignment.MiddleCenter;
             CellLabel.BackColor = Color.Transparent;
             Click_CellLabel(RObject.position, CellLabel);
-            Environment.Controls.Add(CellLabel, RObject.position.X, RObject.position.Y);
+            RoomDisplay.Controls.Add(CellLabel, RObject.position.X, RObject.position.Y);
             Update_CellLabel(CellLabel, RObject);
             return CellLabel;
         }
@@ -215,7 +216,7 @@ namespace AgentOrientedProgramming
         {
             if (Position == null)
             {
-                Position = Environment.GetCellPositionFromCursorPosition();
+                Position = RoomDisplay.GetCellPositionFromCursorPosition();
             }
             if (Room.Map[Position.Value.X, Position.Value.Y] != null
                 && Room.Map[Position.Value.X, Position.Value.Y].type == P)
@@ -239,7 +240,7 @@ namespace AgentOrientedProgramming
                 }
                 if (RObject != null && RObject.ToString() != null)
                 {
-                    Label CellLabel = (Label)Environment.GetControlFromPosition(Position.Value.X, Position.Value.Y);
+                    Label CellLabel = (Label)RoomDisplay.GetControlFromPosition(Position.Value.X, Position.Value.Y);
                     if (CellLabel == null)
                     {
                         CellLabel = Create_CellLabel(RObject);
@@ -250,7 +251,7 @@ namespace AgentOrientedProgramming
                     }
                 }
             }
-            Environment.Refresh();
+            RoomDisplay.Refresh();
             return Position.Value;
         }
         private void Environment_Click_Obstacles(object sender, MouseEventArgs e)
@@ -301,7 +302,7 @@ namespace AgentOrientedProgramming
         private void Agent_UpdateDirection(string Direction)
         {
             Room.DCAgent.direction = Direction;
-            Environment.GetControlFromPosition(Room.DCAgent.position.X, Room.DCAgent.position.Y).Text
+            RoomDisplay.GetControlFromPosition(Room.DCAgent.position.X, Room.DCAgent.position.Y).Text
             = Room.DCAgent.ToString();
         }
         private void SetManually_Agent_UP_Click(object sender, EventArgs e)
@@ -362,9 +363,9 @@ namespace AgentOrientedProgramming
 
         private void Cell_Remove_Color(Color c)
         {
-            for (int i = 0; i < Environment.ColumnCount; i++)
+            for (int i = 0; i < RoomDisplay.ColumnCount; i++)
             {
-                for (int j = 0; j < Environment.RowCount; j++)
+                for (int j = 0; j < RoomDisplay.RowCount; j++)
                 {
                     if (Room.bgColors[i, j] == c)
                     {
@@ -376,33 +377,34 @@ namespace AgentOrientedProgramming
 
         private void About_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("DUST COLLECTOR");
+            MessageBox.Show("DUST COLLECTOR\nGiáo viên hướng dẫn:\nThs. HUỲNH THỊ THANH THƯƠNG\nNhóm sinh viên:\n13520006 - LÊ KHẮC AN\n13520280 - ĐINH QUANG HÌNH\n13520803 - HUỲNH THANH THẢO\n13521064 - NGUYỄN THỤY VY");
         }
 
         public void oneNextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Room.UpdateMap();
-            Environment.GetControlFromPosition(Room.DCAgent.position.X, Room.DCAgent.position.Y).Text
+            RoomDisplay.GetControlFromPosition(Room.DCAgent.position.X, Room.DCAgent.position.Y).Text
             = Room.DCAgent.ToString();
         }
 
         private void startToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Environment.RowCount > 0 && Environment.ColumnCount > 0)
+            if (RoomDisplay.RowCount <= 0 || RoomDisplay.ColumnCount <= 0)
             {
-                if (Room.DCAgent == null)
-                {
-                    SetRandom_Agent_Click(null, null);
-                }
-                Set_Click(Process.None);
-                Environment.RemoveClickEvent();
-                editToolStripMenuItem.Enabled = false;
-                startToolStripMenuItem.Enabled = false;
-                stopToolStripMenuItem.Enabled = true;
-                oneNextToolStripMenuItem.Enabled = true;
-                forwardToToolStripMenuItem.Enabled = true;
-                Room.DCAgent.Start();
+                SetRoomSize_Click(null, null);
             }
+            if (Room.DCAgent == null)
+            {
+                SetRandom_Agent_Click(null, null);
+            }
+            Set_Click(Process.None);
+            RoomDisplay.RemoveClickEvent();
+            editToolStripMenuItem.Enabled = false;
+            startToolStripMenuItem.Enabled = false;
+            stopToolStripMenuItem.Enabled = true;
+            oneNextToolStripMenuItem.Enabled = true;
+            forwardToToolStripMenuItem.Enabled = true;
+            Room.DCAgent.Start();
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
@@ -424,6 +426,15 @@ namespace AgentOrientedProgramming
             else
             {
                 SFForm.Show();
+            }
+        }
+
+        private void selectPROLOGDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = folderBrowserDialog1.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                Environment.SetEnvironmentVariable("SWI_HOME_DIR", folderBrowserDialog1.SelectedPath);
             }
         }
     }
