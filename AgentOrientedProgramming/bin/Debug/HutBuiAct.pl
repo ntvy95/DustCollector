@@ -11,13 +11,12 @@
 :- dynamic timePassed/1.
 
 do(start) :- done(stop), timePassed(T), T = 10.
-do(suck) :- not(done(stop)), in(X,Y), dirty(X,Y).
 do(stop) :- not(done(start)), leftmoves(0).
+do(suck) :- not(done(stop)), in(X,Y), dirty(X,Y).
 do(forward) :- not(done(stop)), in(X,Y), choose(A), facing(A), Temp1 is X + round(cos(pi*A/180)), Temp2 is Y + round(sin(pi*A/180)),
 not(obstacle(Temp1, Temp2, both)).
 do(turn90) :- not(done(stop)), choose(M), not(facing(M)).
-do(wait) :- not(done(stop)), in(X,Y), facing(A), choose(A), Temp1 is X + round(cos(pi*A/180)),
-Temp2 is Y + round(sin(pi*A/180)), obstacle(Temp1, Temp2, dynamic).
+do(wait) :- not(done(stop)).
 
 choose(M) :- in(X,Y), facing(A), A1 is A+90, A2 is A+180, A3 is A+270, TempA1 is X + round(cos(pi*A/180)),
 TempA2 is Y + round(sin(pi*A/180)), weight(TempA1, TempA2, WA), TempA11 is X + round(cos(pi*A1/180)), TempA12 is Y + round(sin(pi*A1/180)),
