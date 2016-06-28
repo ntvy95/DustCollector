@@ -40,12 +40,12 @@ namespace AgentOrientedProgramming
                 ParentForm.RoomDisplay.Controls.Clear();
                 ParentForm.RoomDisplay.RowStyles.Clear();
                 ParentForm.RoomDisplay.ColumnStyles.Clear();
-                ParentForm.Room = new RoomEnvironment(ParentForm.RoomDisplay, ParentForm);
                 ParentForm.Room.SetMap(RoomWidth, RoomHeight);
                 for (int i = 0; i < RoomWidth; i++)
                 {
                     ParentForm.RoomDisplay.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F / RoomWidth));
                 }
+
                 ParentForm.RoomDisplay.ColumnCount = RoomWidth;
                 for (int i = 0; i < RoomHeight; i++)
                 {

@@ -30,6 +30,10 @@ namespace AgentOrientedProgramming
                 {
                     ParentForm.oneNextToolStripMenuItem_Click(null, null);
                     ParentForm.Refresh();
+                    if (ParentForm.Room.DCAgent.action == "stop" && ParentForm.Room.DCAgent.timePassed == 0)
+                    {
+                        break;
+                    }
                     Thread.Sleep(1000);
                     ForwardTime = ForwardTime - 1;
                 }

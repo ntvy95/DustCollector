@@ -15,6 +15,7 @@ namespace AgentOrientedProgramming
 {
     public partial class MainForm : Form
     {
+        private int timePassed;
         public RoomEnvironment Room;
         public DBLayoutPanel RoomDisplay;
         public Process Processing;
@@ -40,6 +41,7 @@ namespace AgentOrientedProgramming
             RoomDisplay.BackColor = Color.White;
 
             Room = new RoomEnvironment(RoomDisplay, this);
+            this.timePassed = 0;
         }
 
         public Color ColorByProcess(Process p)
@@ -187,15 +189,20 @@ namespace AgentOrientedProgramming
                 RoomDisplay.Refresh();
             };
         }
-        public Label Create_CellLabel(RoomObject RObject)
+        public Label Create_CellLabel(Point p)
         {
             Label CellLabel = new Label();
             CellLabel.AutoSize = false;
             CellLabel.Dock = DockStyle.Fill;
             CellLabel.TextAlign = ContentAlignment.MiddleCenter;
             CellLabel.BackColor = Color.Transparent;
+            RoomDisplay.Controls.Add(CellLabel, p.X, p.Y);
+            return CellLabel;
+        }
+        public Label Create_CellLabel(RoomObject RObject)
+        {
+            Label CellLabel = Create_CellLabel(RObject.position);
             Click_CellLabel(RObject.position, CellLabel);
-            RoomDisplay.Controls.Add(CellLabel, RObject.position.X, RObject.position.Y);
             Update_CellLabel(CellLabel, RObject);
             return CellLabel;
         }
@@ -384,7 +391,8 @@ namespace AgentOrientedProgramming
         {
             Room.UpdateMap();
             RoomDisplay.GetControlFromPosition(Room.DCAgent.position.X, Room.DCAgent.position.Y).Text
-            = Room.DCAgent.ToString();
+            = Room.DCAgent.ToString() + "[Weight : " + Room.AgentWeight[Room.DCAgent.position.X, Room.DCAgent.position.Y] + "]";
+            UpdateEnvTime();
         }
 
         private void startToolStripMenuItem_Click(object sender, EventArgs e)
@@ -407,6 +415,12 @@ namespace AgentOrientedProgramming
             Room.DCAgent.Start();
         }
 
+        private void UpdateEnvTime()
+        {
+            this.timePassed = this.timePassed + 1;
+            time0ToolStripMenuItem.Text = "Time: " + this.timePassed;
+        }
+
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
         {
             editToolStripMenuItem.Enabled = true;
@@ -415,6 +429,7 @@ namespace AgentOrientedProgramming
             oneNextToolStripMenuItem.Enabled = false;
             forwardToToolStripMenuItem.Enabled = false;
             SFForm.Hide();
+            this.timePassed = 0;
         }
 
         private void forwardToToolStripMenuItem_Click(object sender, EventArgs e)

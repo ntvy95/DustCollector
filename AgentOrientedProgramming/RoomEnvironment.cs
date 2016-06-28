@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Text.RegularExpressions;
 
 namespace AgentOrientedProgramming
 {
@@ -16,6 +17,7 @@ namespace AgentOrientedProgramming
         public Agent DCAgent; //in environment's coordination.
         public List<RoomObject> UpdatableObject;
         public MainForm MForm;
+        public double[,] AgentWeight;
 
         public RoomEnvironment(DBLayoutPanel d, MainForm MF)
         {
@@ -27,6 +29,7 @@ namespace AgentOrientedProgramming
         public void SetMap(int width, int height) {
             Map = new RoomObject[width, height];
             bgColors = new Color[width, height];
+            AgentWeight = new double[width, height];
         }
 
         public void EmptyFloor(Point position)
@@ -53,6 +56,51 @@ namespace AgentOrientedProgramming
             else
             {
                 bgColors[p.X, p.Y] = RoomObject.objcolor;
+            }
+            UpdateAgentWeight(p);
+        }
+
+        public void UpdateAgentWeight(Point p)
+        {
+            Label CellLabel = (Label)Display.GetControlFromPosition(p.X, p.Y);
+            if (AgentWeight[p.X, p.Y] > 0)
+            {
+                if (CellLabel == null)
+                {
+                    CellLabel = MForm.Create_CellLabel(p);
+                    Display.Controls.Add(CellLabel, p.X, p.Y);
+                }
+                if (CellLabel.Text.Contains("Weight"))
+                {
+                    Regex regex = new Regex(@"\[Weight : ([0-9]+)\]");
+                    CellLabel.Text = regex.Replace(CellLabel.Text, "[Weight : " + AgentWeight[p.X, p.Y].ToString() + "]");
+                }
+                else
+                {
+                    CellLabel.Text = CellLabel.Text + " [Weight : " + AgentWeight[p.X, p.Y].ToString() + "]";
+                }
+            }
+            else if (CellLabel != null)
+            {
+                Regex regex = new Regex(@"\[Weight : ([0-9]+)\]");
+                CellLabel.Text = regex.Replace(CellLabel.Text, "");
+            }
+        }
+
+        public void ResetAgentWeight()
+        {
+            AgentWeight = new double[AgentWeight.GetLength(0),AgentWeight.GetLength(1)];
+            for (int i = 0; i < bgColors.GetLength(0); i++)
+            {
+                for (int j = 0; j < bgColors.GetLength(1); j++)
+                {
+                    Label CellLabel = (Label)Display.GetControlFromPosition(i, j);
+                    if (CellLabel != null)
+                    {
+                        Regex regex = new Regex(@"\[Weight : ([0-9]+)\]");
+                        CellLabel.Text = regex.Replace(CellLabel.Text, "");
+                    }
+                }
             }
         }
 

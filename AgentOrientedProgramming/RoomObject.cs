@@ -44,6 +44,11 @@ namespace AgentOrientedProgramming
             if (c != null)
             {
                 room.Display.Controls.Remove(c);
+                Control cp = room.Display.GetControlFromPosition(p.X, p.Y);
+                if(cp != null) {
+                    room.Display.Controls.Remove(cp);
+                    cp.Dispose();
+                }
                 room.Display.Controls.Add(c, p.X, p.Y);
             }
             room.UpdateRoomObject(position, Below);
@@ -143,7 +148,7 @@ namespace AgentOrientedProgramming
         public int m;
         public int leftmoves;
         public int timePassed;
-        public Dictionary<Point, int> weight;
+        public Dictionary<Point, double> weight;
         public List<Point> discover;
         public int RelativeDirectionType;
         public Agent(Point p, RoomEnvironment r, string d)
@@ -197,10 +202,11 @@ namespace AgentOrientedProgramming
         }
         public override string ToString()
         {
-            return getEnvironment() + " " + direction + " [ ACTION : " + action.ToUpper() + " ]";
+            return getEnvironment() + " " + direction + " [Action : " + action.ToUpper() + "]";
         }
         public void Start()
         {
+            room.ResetAgentWeight();
             switch (this.direction)
             {
                 case "[Agent : UP]":
@@ -217,35 +223,49 @@ namespace AgentOrientedProgramming
                     break;
             }
             this.InnerPosition = new Point(0, 0);
-            this.weight = new Dictionary<Point, int>();
+            this.weight = new Dictionary<Point, double>();
             this.discover = new List<Point>();
             this.action = "start";
             this.UpdateInternalState();
         }
         public override void Update()
         {
-            Console.WriteLine("------------------------------------------");
-            this.Decide();
-            switch (this.action)
+            if (this.action != "stop" || this.timePassed == 10)
             {
-                case "turn90":
-                    this.Turn90();
-                    break;
-                case "forward":
-                    this.Forward();
-                    break;
-                case "suck":
-                    this.Suck();
-                    break;
-                case "start":
-                    this.Start();
-                    break;
+                Point PreviousInnerPosition = InnerPosition,
+                      PreviousPosition = position;
+                Console.WriteLine("------------------------------------------");
+                this.Decide();
+                switch (this.action)
+                {
+                    case "turn90":
+                        this.Turn90();
+                        break;
+                    case "forward":
+                        this.Forward();
+                        break;
+                    case "suck":
+                        this.Suck();
+                        break;
+                    case "start":
+                        this.Start();
+                        break;
+                }
+                if (this.action != "start")
+                {
+                    this.UpdateInternalState();
+                    if (this.action == "forward")
+                    {
+                        room.AgentWeight[PreviousPosition.X, PreviousPosition.Y] = weight[PreviousInnerPosition];
+                        room.UpdateAgentWeight(PreviousPosition);
+                    }
+                }
+                Console.WriteLine("------------------------------------------");
             }
-            if (this.action != "start")
+            else
             {
-                this.UpdateInternalState();
+                this.timePassed = this.timePassed + 1;
             }
-            Console.WriteLine("------------------------------------------");
         }
         public void UpdateInternalState()
         {
@@ -269,8 +289,16 @@ namespace AgentOrientedProgramming
                     Console.WriteLine("assert(wasleftmoves(" + this.leftmoves + "))");
                     foreach (Point w in this.weight.Keys)
                     {
-                        PlQuery.PlCall("assert(wasweight(" + w.X + "," + w.Y + "," + this.weight[w] + "))");
-                        Console.WriteLine("assert(wasweight(" + w.X + "," + w.Y + "," + this.weight[w] + "))");
+                        if (double.IsPositiveInfinity(this.weight[w]))
+                        {
+                            PlQuery.PlCall("assert(wasweight(" + w.X + "," + w.Y + ",inf))");
+                            Console.WriteLine("assert(wasweight(" + w.X + "," + w.Y + ",inf))");
+                        }
+                        else
+                        {
+                            PlQuery.PlCall("assert(wasweight(" + w.X + "," + w.Y + "," + this.weight[w] + "))");
+                            Console.WriteLine("assert(wasweight(" + w.X + "," + w.Y + "," + this.weight[w] + "))");
+                        }
                     }
                     foreach (Point d in this.discover)
                     {
@@ -312,12 +340,15 @@ namespace AgentOrientedProgramming
                 }
                 using (var q = new PlQuery("weight(X, Y, W)"))
                 {
-                    if (q.Solutions.Count() > 0)
+                    foreach (PlQueryVariables v in q.SolutionVariables)
                     {
-                        PlQueryVariables v = q.SolutionVariables.ElementAt(0);
-                        int W;
-                        if (Int32.TryParse(v["W"].ToString(), out W))
+                        double W = 0;
+                        if (v["W"].ToString() == "inf" || Double.TryParse(v["W"].ToString(), out W))
                         {
+                            if (v["W"].ToString() == "inf")
+                            {
+                                W = double.PositiveInfinity;
+                            }
                             this.weight[new Point(Int32.Parse(v["X"].ToString()), Int32.Parse(v["Y"].ToString()))] = W;
                             Console.WriteLine("weight(" + Int32.Parse(v["X"].ToString()) + ", " + Int32.Parse(v["Y"].ToString()) + ", " + W + ")");
                         }
@@ -389,8 +420,16 @@ namespace AgentOrientedProgramming
                 }
                 foreach (Point w in this.weight.Keys)
                 {
-                    PlQuery.PlCall("assert(wasweight(" + w.X + "," + w.Y + "," + this.weight[w] + "))");
-                    Console.WriteLine("assert(wasweight(" + w.X + "," + w.Y + "," + this.weight[w] + "))");
+                    if (double.IsPositiveInfinity(this.weight[w]))
+                    {
+                        PlQuery.PlCall("assert(wasweight(" + w.X + "," + w.Y + ",inf))");
+                        Console.WriteLine("assert(wasweight(" + w.X + "," + w.Y + ",inf))");
+                    }
+                    else
+                    {
+                        PlQuery.PlCall("assert(wasweight(" + w.X + "," + w.Y + "," + this.weight[w] + "))");
+                        Console.WriteLine("assert(wasweight(" + w.X + "," + w.Y + "," + this.weight[w] + "))");
+                    }
                 }
                 using (var q = new PlQuery("do(A)"))
                 {
