@@ -350,7 +350,7 @@ namespace AgentOrientedProgramming
                                 W = double.PositiveInfinity;
                             }
                             this.weight[new Point(Int32.Parse(v["X"].ToString()), Int32.Parse(v["Y"].ToString()))] = W;
-                            Console.WriteLine("weight(" + Int32.Parse(v["X"].ToString()) + ", " + Int32.Parse(v["Y"].ToString()) + ", " + W + ")");
+                            Console.WriteLine("weight(" + Int32.Parse(v["X"].ToString()) + ", " + Int32.Parse(v["Y"].ToString()) + ", " + v["W"].ToString() + ")");
                         }
                     }
                 }
