@@ -9,7 +9,7 @@
 :- dynamic timePassed/1.
 
 do(start) :- done(stop), timePassed(10).
-do(stop) :- not(done(start)), leftmoves(0).
+do(stop) :- not(done(start)), in(X,Y), not(dirty(X,Y)), leftmoves(0).
 do(suck) :- in(X,Y), dirty(X,Y).
 do(forward) :- in(X,Y), choose(A), facing(A), Temp1 is X + round(cos(pi*A/180)), Temp2 is Y + round(sin(pi*A/180)),
 not(obstacle(Temp1, Temp2, both)).
