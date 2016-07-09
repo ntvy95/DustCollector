@@ -29,8 +29,8 @@ namespace AgentOrientedProgramming
 
         private void button_OK_Click(object sender, EventArgs e)
         {
-            //try
-            //{
+            try
+            {
                 RoomWidth = Int32.Parse(textbox_Width.Text);
                 RoomHeight = Int32.Parse(textbox_Height.Text);
                 if (RoomWidth == 0 || RoomHeight == 0)
@@ -49,18 +49,18 @@ namespace AgentOrientedProgramming
                 ParentForm.RoomDisplay.ColumnCount = RoomWidth;
                 for (int i = 0; i < RoomHeight; i++)
                 {
-                    ParentForm.RoomDisplay.RowStyles.Add(new RowStyle(SizeType.Percent, 100F / ParentForm.Height));
+                    ParentForm.RoomDisplay.RowStyles.Add(new RowStyle(SizeType.Percent, 100F / RoomHeight));
                 }
                 ParentForm.RoomDisplay.RowCount = RoomHeight;
                 ParentForm.RoomDisplay.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
                 ParentForm.RoomDisplay.Refresh();
                 ParentForm.Processing = Process.None;
                 Hide();
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message);
-            //}
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void RoomSizeForm_Activated(object sender, EventArgs e)

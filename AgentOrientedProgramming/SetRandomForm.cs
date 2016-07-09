@@ -28,8 +28,8 @@ namespace AgentOrientedProgramming
 
         private void button_OK_Click(object sender, EventArgs e)
         {
-            //try
-            //{
+            try
+            {
                 int NumberOfRandom_number = Int32.Parse(NumberOfRandom.Text);
                 if (NumberOfRandom_number > ParentForm.RoomDisplay.ColumnCount * ParentForm.RoomDisplay.RowCount)
                 {
@@ -38,11 +38,11 @@ namespace AgentOrientedProgramming
                 Random(NumberOfRandom_number);
                 ParentForm.Processing = Process.None;
                 Hide();
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message);
-            //}
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         public void Random(int N, HashSet<Process> AllowedCell = null)
